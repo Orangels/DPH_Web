@@ -2,6 +2,7 @@ import React from 'react'
 import Chart_area from "../../Chart/Chart_area"
 import {screen_scale_height, screen_scale_width} from "../../parameter/parameters";
 import Home_content_template from "../../../common/Home_content_template";
+import WaterWave from '../../../common/component/WaterWave'
 // import backgroundBanner from '../../../asset/back_new/10_数据概览.png'
 import backgroundBanner from '../../../asset/back_new/数据概览.png'
 import Chart_custom from "../../Chart/Chart_custom";
@@ -9,6 +10,7 @@ import Single_Histogram from '../../Chart/Chart_singleHistogram'
 import Histogram from "../../Chart/Histogram";
 // import backgroundBanner from "../../../asset/stu_back/4_学科分布.png";
 
+let WaterWave_radius = 240 * screen_scale_width
 
 let Ul_component = ({data, style})=> {
     let textContent = data.map((value,index)=>{
@@ -202,7 +204,9 @@ export default class Home_content_2_2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: home_content_2_2_data
+            data: home_content_2_2_data,
+            entry_persons: 0,
+            pass_persons: 0,
         }
 
     }
@@ -225,6 +229,7 @@ export default class Home_content_2_2 extends React.Component {
 
     render() {
         let component_text = this.state.state_props
+        let persons_conversion = this.state.pass_persons == 0 ? 0 : parseInt(this.state.entry_persons / this.state.pass_persons * 100)
         return (
             <Home_content_template style={{
                 width:810*screen_scale_width,
@@ -232,16 +237,21 @@ export default class Home_content_2_2 extends React.Component {
                 marginTop: 10*screen_scale_width,
                 background: `url(${backgroundBanner}) no-repeat `,
                 backgroundSize:'100% 100%',
-            }} title={this.props.data['title'] || "出入人员统计"}>
+            }} title={this.props.data['title'] || "人员统计"}>
                 <div style={{
                     // background:`url(${backgroundBanner}) no-repeat `,
                     // backgroundSize: '100% 100%',
                     width:'100%',
                     height:'100%',
-                    flexWrap:'wrap',
+                    display:"flex",
+                    // flexWrap:'wrap',
                     flexDirection: 'row',
-                    marginTop:10*screen_scale_height
-                }}>
+                    marginTop:10*screen_scale_height,
+                    justifyContent:'space-around',
+                    alignItems:'flex-end'
+                }}
+                     className={'home_content_2_2_wrap_div'}
+                >
                     {/*<Ul_component data={component_text}/>*/}
                     {/*<Chart_area  height={330*screen_scale_height}*/}
                     {/*             width={800*screen_scale_width}/>*/}
@@ -251,11 +261,23 @@ export default class Home_content_2_2 extends React.Component {
                     {/*<Single_Histogram  title={'进出人员统计'}*/}
                     {/*            height={330*screen_scale_height}*/}
                     {/*            width={800*screen_scale_width}/>*/}
-                    <Chart_custom  title={''}
-                        // height={276*screen_scale_width}
-                                   dataSource={this.state.data}
-                                   height={330*screen_scale_height}
-                                   width={800*screen_scale_width}/>
+                    {/*<Chart_custom  title={''}*/}
+                    {/*    // height={276*screen_scale_width}*/}
+                    {/*               dataSource={this.state.data}*/}
+                    {/*               height={330*screen_scale_height}*/}
+                    {/*               width={800*screen_scale_width}/>*/}
+                    <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
+                               showText={`${this.state.entry_persons}`}
+                               showText_1={`进店人数`}
+                               rangeValue={80} />
+                    <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
+                               showText={`${this.state.pass_persons}`}
+                               showText_1={`过店人数`}
+                               rangeValue={80} />
+                    <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
+                               showText={`${persons_conversion}%`}
+                               showText_1={`转化率`}
+                               rangeValue={persons_conversion} />
 
                 </div>
             </Home_content_template>
