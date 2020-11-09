@@ -1,10 +1,10 @@
-export function randomNum(minNum,maxNum){
-    switch(arguments.length){
+export function randomNum(minNum, maxNum) {
+    switch (arguments.length) {
         case 1:
-            return parseInt(Math.random()*minNum+1,10);
+            return parseInt(Math.random() * minNum + 1, 10);
             break;
         case 2:
-            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);
+            return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
             break;
         default:
             return 0;
@@ -12,13 +12,13 @@ export function randomNum(minNum,maxNum){
     }
 }
 
-export function randomNum_f(minNum,maxNum){
-    switch(arguments.length){
+export function randomNum_f(minNum, maxNum) {
+    switch (arguments.length) {
         case 1:
-            return parseInt(Math.random()*minNum+1,10);
+            return parseInt(Math.random() * minNum + 1, 10);
             break;
         case 2:
-            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);
+            return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
             break;
         default:
             return 0;
@@ -27,70 +27,69 @@ export function randomNum_f(minNum,maxNum){
 }
 
 
-export let _fetch = async (url,data,resolve) =>{
+export let _fetch = async (url, data, resolve) => {
     try {
-        let response = await fetch(url,{
+        let response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            mode:"cors",
+            mode: "cors",
             body: JSON.stringify(data)
         });
-        let json  = await response.json();
+        let json = await response.json();
         resolve(json);
-    } catch(error) {
+    } catch (error) {
         console.log(error);
     }
 };
 
 
-export let _download_file = async (url,data,resolve) =>{
+export let _download_file = async (url, data, resolve) => {
     try {
-        let response = await fetch(url,{
+        let response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            mode:"cors",
+            mode: "cors",
             body: JSON.stringify({
                 data
             })
         });
-        let blob  = await response.blob();
+        let blob = await response.blob();
         resolve(blob);
-    } catch(error) {
+    } catch (error) {
         console.log(error);
     }
 };
 
 
-
 export function get_state_count(count_arr, state) {
     // [非常, 比较, 正常, 非常不]
-    if (state >70  && state <= 100){
+    if (state > 70 && state <= 100) {
         count_arr[0] = count_arr[0] + 1
     }
-    if (state > 50 && state <= 70){
+    if (state > 50 && state <= 70) {
         count_arr[1] = count_arr[1] + 1
     }
-    if (state > 30 && state <= 50){
+    if (state > 30 && state <= 50) {
         count_arr[2] = count_arr[2] + 1
     }
-    if (state >= 0 && state <= 30){
+    if (state >= 0 && state <= 30) {
         count_arr[3] = count_arr[3] + 1
     }
     return count_arr
 }
 
 export function get_2_float(x) {
-    return  Math.round(x*10000)/100;
+    return Math.round(x * 10000) / 100;
 }
 
 export function show_2_ste(s) {
-    return s.toString().substr(0,2)
+    return s.toString().substr(0, 2)
 
 }
 
@@ -120,28 +119,28 @@ export function get_pie_data(count_arr, name) {
     let total_count = count_arr[0] + count_arr[1] + count_arr[2] + count_arr[3]
 
     let count_arr_tmp = [
-        get_2_float(count_arr[0]/total_count),
-        get_2_float(count_arr[1]/total_count),
-        get_2_float(count_arr[2]/total_count),
-        get_2_float(count_arr[3]/total_count),
+        get_2_float(count_arr[0] / total_count),
+        get_2_float(count_arr[1] / total_count),
+        get_2_float(count_arr[2] / total_count),
+        get_2_float(count_arr[3] / total_count),
     ]
 
     let return_data = [
         {
-            item:`非常${name}`,
-            count:count_arr_tmp[0],
+            item: `非常${name}`,
+            count: count_arr_tmp[0],
         },
         {
-            item:`比较${name}`,
-            count:count_arr_tmp[1],
+            item: `比较${name}`,
+            count: count_arr_tmp[1],
         },
         {
-            item:`正常${name}`,
-            count:count_arr_tmp[2],
+            item: `正常${name}`,
+            count: count_arr_tmp[2],
         },
         {
-            item:`非常不${name}`,
-            count:count_arr_tmp[3],
+            item: `非常不${name}`,
+            count: count_arr_tmp[3],
         }
     ]
     // console.log(return_data)
@@ -149,8 +148,8 @@ export function get_pie_data(count_arr, name) {
 
 }
 
-export function show_2_int(s){
-    return s < 10 ? '0' + s: s;
+export function show_2_int(s) {
+    return s < 10 ? '0' + s : s;
 }
 
 export function deepCopy(obj) {
@@ -169,7 +168,7 @@ export function deepCopy(obj) {
 }
 
 
-export function diff(obj1,obj2){
+export function diff(obj1, obj2) {
     var o1 = obj1 instanceof Object;
     var o2 = obj2 instanceof Object;
     // 判断是不是对象
@@ -218,7 +217,7 @@ export let dateFormat = function (timestamp, formats) {
         return value;
     };
 
-    var myDate = timestamp? new Date(timestamp): new Date();
+    var myDate = timestamp ? new Date(timestamp) : new Date();
 
     var year = myDate.getFullYear();
     var month = zero(myDate.getMonth() + 1);
@@ -244,4 +243,19 @@ export let getBase64 = function (img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
+}
+
+/**
+ *  判断一个点是否在圆的内部
+ *  @param point  测试点坐标
+ *  @param circle 圆心坐标
+ *  @param r 圆半径
+ *  返回true为真，false为假
+ *  */
+
+export let _pointInsideCircle = function pointInsideCircle(point, circle, r) {
+    if (r === 0) return false
+    let dx = circle.x - point.x
+    let dy = circle.y - point.y
+    return dx * dx + dy * dy <= r * r
 }

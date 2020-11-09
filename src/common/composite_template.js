@@ -12,10 +12,10 @@ import Circ from 'gsap'
 
 import {screen_scale_height, model_width, screen_height, screen_scale_width } from '../view/parameter/parameters'
 import { url } from '../common/urls'
-import { imgWidht, imgHeight, iconWidth, iconHeight, trackerMaxValue, heatMapMaxValue } from "../view/parameter/home_content_2_1_parametere_data"
+import { imgWidht, imgHeight, iconWidth, iconHeight, trackerMaxValue, heatMapMaxValue, heatMapInterval } from "../view/parameter/home_content_2_1_parametere_data"
 // import './Home_template.less'
 import { LoginTag } from '../view/parameter/parameters'
-import {deepCopy, dateFormat} from "./utils";
+import {deepCopy, dateFormat, _pointInsideCircle} from "./utils";
 
 const style = {
     backgroundBanner:{
@@ -108,7 +108,7 @@ const style = {
     }
 }
 
-const navgation_btn = ['首页', '实时显示', '系统配置']
+const navgation_btn = ['首页', '实时显示', '区域配置', '系统配置']
 
 @inject('appStore') @observer
 class Template extends React.Component{
@@ -136,6 +136,18 @@ class Template extends React.Component{
         let link = '/'
         let { history } = this.props
         switch (index) {
+            // case 0:
+            //     link='/'
+            //     break
+            // case 1:
+            //     link='/real_time_show'
+            //     break
+            // case 2:
+            //     link='/config'
+            //     break
+            // default:
+            //     link='/'
+            //     break
             case 0:
                 link='/'
                 break
@@ -143,6 +155,9 @@ class Template extends React.Component{
                 link='/real_time_show'
                 break
             case 2:
+                link='/draw'
+                break
+            case 3:
                 link='/config'
                 break
             default:
@@ -158,6 +173,7 @@ class Template extends React.Component{
      * 模拟实时更新数据
      * */
     _update_homte_content_2_1_data(rect) {
+
         let rect_center = deepCopy(rect)
         let rect_tmp = rect.map((val, index)=>{
             val.x = Math.ceil(val.x*imgWidht)-iconWidth/2
@@ -173,9 +189,13 @@ class Template extends React.Component{
             val.y = Math.ceil(val.y*imgHeight)
             val.PersonID = Math.abs(val.PersonID)
             // val.trackID = Math.abs(val.trackID)
-            val.trackID = val.trackID
+            val.trackID = Number(val.trackID)
             return val
         })
+
+        // console.log('**********')
+        // console.log(rect_center)
+        // console.log('**********')
 
         this._addToImage(rect_tmp, false)
         this._addToTracker(rect_center, trackerMaxValue)
@@ -194,11 +214,14 @@ class Template extends React.Component{
         // }
 
         console.log('**********')
-        console.log(this.heatMapPoints)
+        console.log(this.heatMapDurationPoints)
         console.log('**********')
 
+        let timestamp = parseInt(this.props.appStore.trackerTimestamp / 1000)
+
         for (let trackerPerson of trackerObjs){
-            let {x, y} = trackerPerson
+            let {x, y, trackID} = trackerPerson
+            if (trackID >= 10000) continue
             if (!this.heatMapPoints[[x,y]]) {
                 this.heatMapPoints[[x,y]] = {
                     x:x,
@@ -212,8 +235,54 @@ class Template extends React.Component{
                     value: this.heatMapPoints[[x,y]].value + 1
                 };
             }
+
+            let includeKyes = []
+
+            let heatMapDurationPointsTmp = deepCopy(this.heatMapDurationPoints)
+            for (let key in heatMapDurationPointsTmp) {
+                let circle = {
+                    x: parseInt(key.split(',')[0]),
+                    y: parseInt(key.split(',')[1]),
+                }
+                let point = {
+                    x,
+                    y
+                }
+                // console.log('!!!!!!!')
+                // console.log(`point - ${point.x} -- ${point.y} -- ${circle.x} -- ${circle.y}`)
+                // console.log(`trackID - ${trackID} -- ${parseInt(key.split(',')[2])}`)
+                // console.log(`timestamp - ${timestamp} -- ${parseInt(key.split(',')[3])}`)
+                // console.log('!!!!!!!')
+                if (_pointInsideCircle(point, circle, 10) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
+                    // this.heatMapDurationPoints[key] = Object.assign(this.heatMapDurationPoints[key], {value: this.heatMapDurationPoints[key].value + 1});
+                    delete this.heatMapDurationPoints[key];
+                    let value = heatMapDurationPointsTmp[key].value + 1;
+                    console.log(`更新 驻留 value -- ${value}, ${trackID}`)
+                    this.heatMapDurationPoints[[heatMapDurationPointsTmp[key].x,heatMapDurationPointsTmp[key].y,trackID,timestamp]] = {
+                        x:heatMapDurationPointsTmp[key].x,
+                        y:heatMapDurationPointsTmp[key].y,
+                        value: value
+                    };
+
+                    includeKyes.push(circle);
+                    break
+                }
+            }
+            if (includeKyes.length === 0){
+                console.log(includeKyes)
+                console.log(includeKyes.length)
+                console.log(includeKyes.length === 0)
+                console.log(`添加 驻留 value -- 1, ${trackID}`)
+                this.heatMapDurationPoints[[x,y,trackID,timestamp]] = {
+                    x:x,
+                    y:y,
+                    value:1
+                }
+            }
+
         }
         this.props.appStore.updateHeatMapPoints(this.heatMapPoints)
+        this.props.appStore.updateHeatMapDurationPoints(this.heatMapDurationPoints)
     }
 
     _addToTracker (trackerObjs, maxSize) {
@@ -246,7 +315,7 @@ class Template extends React.Component{
         }
 
         let timestamp = results['timestamp'] // 1000
-        timestamp = dateFormat(timestamp, 'Y-m-d H:i:s')
+        // timestamp = dateFormat(timestamp, 'Y-m-d H:i:s')
         this.props.appStore.updateTrackerTimestamp(timestamp)
 
 
@@ -468,8 +537,13 @@ class Template extends React.Component{
         //tracker
         this.trackIDsArr = toJS(this.props.appStore.trackIDsArr || {})
 
+        //duratioMheatMap
+        this.heatMapDurationPoints = toJS(this.props.appStore.heatMapDurationPoints || {})
+
+
         console.log(this.heatMapPoints)
         console.log(this.trackIDsArr)
+        console.log(this.heatMapDurationPoints)
 
 
         console.log(`Init composite wrap`)
@@ -499,6 +573,7 @@ class Template extends React.Component{
 
         this.props.appStore.updateHeatMapPoints(this.heatMapPoints)
         this.props.appStore.updateTrackIDsArr(this.trackIDsArr)
+        this.props.appStore.updateHeatMapDurationPoints(this.heatMapDurationPoints)
 
         console.log('clear composite_template socket')
     }

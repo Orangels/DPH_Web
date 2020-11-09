@@ -10,8 +10,8 @@ class AppStore {
     @observable entryPersons = new Queue_len(8)
 
     @observable imgageIcomCoors = []
-    // @observable heatMapPoints = {}
     @observable heatMapPoints = {}
+    @observable heatMapDurationPoints = {}
     @observable trackIDsArr = {}
     @observable trackerArr = []
 
@@ -31,6 +31,10 @@ class AppStore {
 
     @action updateHeatMapPoints(vHeatMapPoints) {
         this.heatMapPoints = deepCopy(vHeatMapPoints)
+    }
+
+    @action updateHeatMapDurationPoints(vHeatMapDurationPoints) {
+        this.heatMapDurationPoints = deepCopy(vHeatMapDurationPoints)
     }
 
     @action updateTrackIDsArr(vTrackIDsArr) {

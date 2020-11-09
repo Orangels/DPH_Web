@@ -5,9 +5,9 @@ import { Checkbox } from 'antd';
 import  Heatmap  from 'heatmap.js';
 import {screen_scale_height, screen_scale_width, trackerColoreMap, personIDColreMap} from "../../parameter/parameters";
 
-import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, trackerMaxValue } from "../../parameter/home_content_2_1_parametere_data"
+import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, trackerMaxValue, heatMapDuration } from "../../parameter/home_content_2_1_parametere_data"
 
-import {deepCopy, randomNum} from '../../../common/utils'
+import {deepCopy, randomNum, dateFormat} from '../../../common/utils'
 import xxs from "../../../asset/test/xxs_icon.jpg";
 import wzh from "../../../asset/test/wzh_icon.jpg";
 import ls from "../../../asset/test/ls_icon.jpg";
@@ -21,7 +21,7 @@ import back_wiwide from "../../../asset/test/world_wiwide.jpg";
 import './Home_content_2_1_canvas.css'
 
 const CheckboxGroup = Checkbox.Group;
-let plainOptions = ['显示轨迹', '显示热力图'];
+let plainOptions = ['显示轨迹', '显示人次热力图', '显示驻留时长热力图'];
 
 const clearImgWidth = 30
 
@@ -99,6 +99,9 @@ class Home_content_2_1_canvas extends React.Component {
         this.imgageIcomCoors = toJS(this.props.appStore.imgageIcomCoors || [])
         // //heatMap
         this.heatMapPoints = toJS(this.props.appStore.heatMapPoints || {});
+        //durationheatMap
+        this.heatMapDurationPoints = toJS(this.props.appStore.heatMapDurationPoints || {})
+
         // //tracker
         this.trackIDsArr = toJS(this.props.appStore.trackIDsArr || {})
         //
@@ -109,7 +112,7 @@ class Home_content_2_1_canvas extends React.Component {
         console.log(this.imgageIcomCoors)
         requestAnimationFrame(()=>{
             this._drawImage(this.imgageIcomCoors, false)
-            this._drawPoint(this.heatMapPoints)
+            this._drawPoint(this.heatMapPoints, this.heatMapDurationPoints)
             this._drawTracker(this.trackerArr)
         })
 
@@ -133,6 +136,9 @@ class Home_content_2_1_canvas extends React.Component {
         this.imgageIcomCoors = this.props.appStore.imgageIcomCoors || []
         //heatMap
         this.heatMapPoints = this.props.appStore.heatMapPoints || {}
+        //heatMapDuration
+        this.heatMapDurationPoints = this.props.appStore.heatMapDurationPoints || {}
+
         //tracker
         this.trackIDsArr = this.props.appStore.trackIDsArr || {}
 
@@ -183,6 +189,39 @@ class Home_content_2_1_canvas extends React.Component {
 
         });
 
+        // init durationHeatMap
+        this.durantionHeatMap = Heatmap.create({
+
+            container: document.getElementById('ls_heatmap_duration_canvas'),
+
+            // radius: 80,
+            radius: 0,
+
+            maxOpacity: .9,
+
+            minOpacity: 0,
+
+            blur: 1,
+
+            // backgroundColor: '#0DEEFF',
+
+            gradient: {
+
+                '.1': '#32A933',
+
+                '.2': '#3ACB49',
+
+                '.4': '#94E149',
+
+                '.82': '#CDDE40',
+
+                '1': '#ED6B44'
+
+            }
+
+        });
+
+
         // this.timer = setInterval(this._update_data, 1000);
         // this.timer = setTimeout(this._update_data, 1000);
 
@@ -223,8 +262,10 @@ class Home_content_2_1_canvas extends React.Component {
         return colors[Math.floor(intensity/2)];
     }
 
-    _drawPoint(heatMapPoints) {
+    _drawPoint(heatMapPoints, heatMapDurationPoints) {
         let data = []
+        let durationDate = []
+
         for (let heatMapPoint in heatMapPoints){
             let result = {}
             result.x = heatMapPoints[heatMapPoint].x
@@ -233,11 +274,27 @@ class Home_content_2_1_canvas extends React.Component {
             data.push(result)
         }
 
+        for (let heatMapDurationPoint in heatMapDurationPoints){
+            let result = {}
+            result.x = heatMapDurationPoints[heatMapDurationPoint].x
+            result.y = heatMapDurationPoints[heatMapDurationPoint].y
+            result.value = parseInt(heatMapDurationPoints[heatMapDurationPoint].value / heatMapDuration)
+            durationDate.push(result)
+        }
+
         this.heatMap.setData({
 
             max: heatMapMaxValue,
 
             data
+
+        })
+
+        this.durantionHeatMap.setData({
+
+            max: heatMapMaxValue,
+
+            data: durationDate
 
         })
     }
@@ -384,7 +441,8 @@ class Home_content_2_1_canvas extends React.Component {
                 <div style={{position:'absolute', top:0, zIndex:99, right:0, backgroundColor:'#FFFFFF', padding:"0px 5px",
                     borderRadius:5
                 }}>
-                    {this.props.appStore.trackerTimestamp}
+                    {/*{this.props.appStore.trackerTimestamp}*/}
+                    {dateFormat(this.props.appStore.trackerTimestamp, 'Y-m-d H:i:s')}
                 </div>
                 {/*<img src={back} width={imgWidht} height={imgHeight} style={{zIndex:3}}/>*/}
                 <img src={back_wiwide} width={imgWidht} height={imgHeight} style={{zIndex:3}}/>
@@ -403,6 +461,17 @@ class Home_content_2_1_canvas extends React.Component {
                     <div id="ls_heatmap_canvas"
                          style={{border:'0px solid #FF1C1F', borderRadius:5,
                              zIndex: this.state.checkedList.includes(plainOptions[1]) ? 19 : -1,
+                             position:"absolute", top:0,
+                             width:imgWidht,
+                             height:imgHeight
+                         }} />
+                </div>
+                <div className={`ls_heatmap_duration_canvas_wrap`} style={{position:"absolute", top:0,
+                    // zIndex: this.state.checkedList.includes(plainOptions[1]) ? 19 : -1,
+                }}>
+                    <div id="ls_heatmap_duration_canvas"
+                         style={{border:'0px solid #FF1C1F', borderRadius:5,
+                             zIndex: this.state.checkedList.includes(plainOptions[2]) ? 9 : -1,
                              position:"absolute", top:0,
                              width:imgWidht,
                              height:imgHeight
