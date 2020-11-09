@@ -219,7 +219,7 @@ class Student_analyze extends React.Component {
         // this.socket_cam = io(url_socket)
         // this.socket_cam.on('new_state',this._ws_new_state)
         this.start_time = new Date().getTime()
-        this.timer = setInterval(this._update_track_data, 10000);
+        // this.timer = setInterval(this._update_track_data, 10000);
         // this.socket_cam.on('new_person_state',this._ws_new_person_state);
 
         // let show_cam_0 = localStorage.getItem("show_cam_0") || false
@@ -310,7 +310,6 @@ class Student_analyze extends React.Component {
             if (this.state.show_cam_0){
                 this.player = video(`example_video_0`,options);
                 this.player_1 = video(`example_video_1`,options_1);
-                this.player_center = video(`example_video_0_center`,options_0_center);
             }
             if (this.state.show_cam_1){
                 this.player_2 = video(`example_video_2`,options_2);
@@ -564,8 +563,6 @@ class Student_analyze extends React.Component {
         this.player_2.dispose()
         this.player_3.dispose()
 
-        this.player_center.dispose()
-
         // this.socket_cam.disconnect()
         // this.socket_cam.emit('disconnect')
         this.timer && clearInterval(this.timer)
@@ -698,25 +695,6 @@ class Student_analyze extends React.Component {
                                              closable>
                                             {`鱼眼 0`}
                                         </Tag>
-                                        <div style={{
-                                            position: 'absolute', top: 0, left: 0, zIndex: 99,
-                                            width: 100,
-                                            height:100,
-                                            // objectFit:"fill"
-                                            // objectFit:'contain'
-                                        }}>
-                                            <video id={`example_video_0_center`} className="video-js vjs-default-skin video_0" preload="auto"
-                                                   autoPlay="autoplay"
-                                                // style={{width:'100%', height:content_1_height,
-                                                   style={{
-                                                       width: '100%',
-                                                       // objectFit:"fill"
-                                                       // objectFit:'contain'
-                                                   }}
-                                            >
-                                                <source src="rtmp://192.168.88.221:1935/hls/room" type="rtmp/flv"/>
-                                            </video>
-                                        </div>
                                         <video id={`example_video_0`} className="video-js vjs-default-skin video_0" preload="auto"
                                                autoPlay="autoplay"
                                             // style={{width:'100%', height:content_1_height,

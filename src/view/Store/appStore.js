@@ -12,6 +12,10 @@ class AppStore {
     @observable imgageIcomCoors = []
     @observable heatMapPoints = {}
     @observable heatMapDurationPoints = {}
+    //fishHeatMap
+    @observable fishHeatMapPoints = {}
+    @observable fishHeatMapDurationPoints = {}
+
     @observable trackIDsArr = {}
     @observable trackerArr = []
 
@@ -35,6 +39,15 @@ class AppStore {
 
     @action updateHeatMapDurationPoints(vHeatMapDurationPoints) {
         this.heatMapDurationPoints = deepCopy(vHeatMapDurationPoints)
+    }
+
+    //fishHeatMap
+    @action updateFishHeatMapPoints(vFishHeatMapPoints) {
+        this.fishHeatMapPoints = deepCopy(vFishHeatMapPoints)
+    }
+
+    @action updateFishHeatMapDurationPoints(vFishHeatMapDurationPoints) {
+        this.fishHeatMapDurationPoints = deepCopy(vFishHeatMapDurationPoints)
     }
 
     @action updateTrackIDsArr(vTrackIDsArr) {

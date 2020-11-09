@@ -2,7 +2,7 @@ import React from 'react'
 import Home_content_template from '../../common/Home_content_template'
 import {Home_data} from './Home_data'
 import {screen_scale_width} from "../parameter/parameters";
-import Home from "./Home";
+import Home from "./Home_ori";
 
 const style = {
     wrapStyle:{

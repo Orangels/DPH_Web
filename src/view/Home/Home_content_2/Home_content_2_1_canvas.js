@@ -5,7 +5,7 @@ import { Checkbox } from 'antd';
 import  Heatmap  from 'heatmap.js';
 import {screen_scale_height, screen_scale_width, trackerColoreMap, personIDColreMap} from "../../parameter/parameters";
 
-import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, trackerMaxValue, heatMapDuration } from "../../parameter/home_content_2_1_parametere_data"
+import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, trackerMaxValue, heatMapDuration, plainOptions } from "../../parameter/home_content_2_1_parametere_data"
 
 import {deepCopy, randomNum, dateFormat} from '../../../common/utils'
 import xxs from "../../../asset/test/xxs_icon.jpg";
@@ -21,7 +21,6 @@ import back_wiwide from "../../../asset/test/world_wiwide.jpg";
 import './Home_content_2_1_canvas.css'
 
 const CheckboxGroup = Checkbox.Group;
-let plainOptions = ['显示轨迹', '显示人次热力图', '显示驻留时长热力图'];
 
 const clearImgWidth = 30
 
@@ -49,9 +48,13 @@ class Home_content_2_1_canvas extends React.Component {
     }
 
     _checkBoxOnChange(checkedList) {
+        let _sync_checkedList = this.props.sync_checkedList || function () {
+
+        }
         this.setState({
             checkedList,
         });
+        _sync_checkedList(checkedList)
     }
 
     /**
@@ -101,7 +104,8 @@ class Home_content_2_1_canvas extends React.Component {
         this.heatMapPoints = toJS(this.props.appStore.heatMapPoints || {});
         //durationheatMap
         this.heatMapDurationPoints = toJS(this.props.appStore.heatMapDurationPoints || {})
-
+        console.log('CAD GET heatMapDurationPoints')
+        console.log(this.heatMapDurationPoints)
         // //tracker
         this.trackIDsArr = toJS(this.props.appStore.trackIDsArr || {})
         //
@@ -297,6 +301,8 @@ class Home_content_2_1_canvas extends React.Component {
             data: durationDate
 
         })
+        console.log(`CAD duration heatMap`)
+        console.log(durationDate)
     }
 
     _addToPoint(trackerObjs) {

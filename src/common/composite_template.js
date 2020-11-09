@@ -12,7 +12,7 @@ import Circ from 'gsap'
 
 import {screen_scale_height, model_width, screen_height, screen_scale_width } from '../view/parameter/parameters'
 import { url } from '../common/urls'
-import { imgWidht, imgHeight, iconWidth, iconHeight, trackerMaxValue, heatMapMaxValue, heatMapInterval } from "../view/parameter/home_content_2_1_parametere_data"
+import { imgWidht, imgHeight, iconWidth, iconHeight, trackerMaxValue, heatMapMaxValue, heatMapInterval, heatMapDuration_radius } from "../view/parameter/home_content_2_1_parametere_data"
 // import './Home_template.less'
 import { LoginTag } from '../view/parameter/parameters'
 import {deepCopy, dateFormat, _pointInsideCircle} from "./utils";
@@ -172,9 +172,11 @@ class Template extends React.Component{
     /**
      * 模拟实时更新数据
      * */
-    _update_homte_content_2_1_data(rect) {
+    _update_homte_content_2_1_data(rect, rect_fish) {
 
         let rect_center = deepCopy(rect)
+        let rect_fish_center = deepCopy(rect_fish)
+
         let rect_tmp = rect.map((val, index)=>{
             val.x = Math.ceil(val.x*imgWidht)-iconWidth/2
             val.y = Math.ceil(val.y*imgHeight)-iconHeight
@@ -193,20 +195,29 @@ class Template extends React.Component{
             return val
         })
 
+        rect_fish_center = rect_fish_center.map((val, index)=>{
+            val.x = Math.ceil(val.x*710)
+            val.y = Math.ceil(val.y*710)
+            val.PersonID = Math.abs(val.PersonID)
+            // val.trackID = Math.abs(val.trackID)
+            val.trackID = Number(val.trackID)
+            return val
+        })
+
         // console.log('**********')
         // console.log(rect_center)
         // console.log('**********')
 
         this._addToImage(rect_tmp, false)
         this._addToTracker(rect_center, trackerMaxValue)
-        this._addToPoint(deepCopy(rect_center))
+        this._addToPoint(deepCopy(rect_center), deepCopy(rect_fish_center))
     }
 
     _addToImage(rect, init){
         this.props.appStore.updateImgageIcomCoors(rect)
     }
 
-    _addToPoint(trackerObjs) {
+    _addToPoint(trackerObjs, fish_trackerObjs) {
         // 清空 heatMap
         // let heatMapPointsKeyArr = Object.values(this.heatMapPoints);
         // if (heatMapPointsKeyArr.length > imgWidht*imgWidht/3/2){
@@ -218,10 +229,10 @@ class Template extends React.Component{
         console.log('**********')
 
         let timestamp = parseInt(this.props.appStore.trackerTimestamp / 1000)
-
+        //CAD heatMap
         for (let trackerPerson of trackerObjs){
             let {x, y, trackID} = trackerPerson
-            if (trackID >= 10000) continue
+            // if (trackID >= 10000) continue
             if (!this.heatMapPoints[[x,y]]) {
                 this.heatMapPoints[[x,y]] = {
                     x:x,
@@ -253,7 +264,7 @@ class Template extends React.Component{
                 // console.log(`trackID - ${trackID} -- ${parseInt(key.split(',')[2])}`)
                 // console.log(`timestamp - ${timestamp} -- ${parseInt(key.split(',')[3])}`)
                 // console.log('!!!!!!!')
-                if (_pointInsideCircle(point, circle, 10) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
+                if (_pointInsideCircle(point, circle, heatMapDuration_radius) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
                     // this.heatMapDurationPoints[key] = Object.assign(this.heatMapDurationPoints[key], {value: this.heatMapDurationPoints[key].value + 1});
                     delete this.heatMapDurationPoints[key];
                     let value = heatMapDurationPointsTmp[key].value + 1;
@@ -281,8 +292,76 @@ class Template extends React.Component{
             }
 
         }
+
+        //fish heatMap
+
+        for (let trackerPerson of fish_trackerObjs){
+            let {x, y, trackID} = trackerPerson
+            // if (trackID >= 10000) continue
+            if (!this.fishHeatMapPoints[[x,y]]) {
+                this.fishHeatMapPoints[[x,y]] = {
+                    x:x,
+                    y:y,
+                    value:1
+                };
+            } else if (this.fishHeatMapPoints[[x,y]]< heatMapMaxValue) {
+                this.fishHeatMapPoints[[x,y]] = {
+                    x:x,
+                    y:y,
+                    value: this.fishHeatMapPoints[[x,y]].value + 1
+                };
+            }
+
+            let includeKyes = []
+
+            let heatMapDurationPointsTmp = deepCopy(this.fishHeatMapDurationPoints)
+            for (let key in heatMapDurationPointsTmp) {
+                let circle = {
+                    x: parseInt(key.split(',')[0]),
+                    y: parseInt(key.split(',')[1]),
+                }
+                let point = {
+                    x,
+                    y
+                }
+                // console.log('!!!!!!!')
+                // console.log(`point - ${point.x} -- ${point.y} -- ${circle.x} -- ${circle.y}`)
+                // console.log(`trackID - ${trackID} -- ${parseInt(key.split(',')[2])}`)
+                // console.log(`timestamp - ${timestamp} -- ${parseInt(key.split(',')[3])}`)
+                // console.log('!!!!!!!')
+                if (_pointInsideCircle(point, circle, heatMapDuration_radius) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
+                    delete this.fishHeatMapDurationPoints[key];
+                    let value = heatMapDurationPointsTmp[key].value + 1;
+                    console.log(`更新 驻留 value -- ${value}, ${trackID}`)
+                    this.fishHeatMapDurationPoints[[heatMapDurationPointsTmp[key].x,heatMapDurationPointsTmp[key].y,trackID,timestamp]] = {
+                        x:heatMapDurationPointsTmp[key].x,
+                        y:heatMapDurationPointsTmp[key].y,
+                        value: value
+                    };
+
+                    includeKyes.push(circle);
+                    break
+                }
+            }
+            if (includeKyes.length === 0){
+                console.log(includeKyes)
+                console.log(includeKyes.length)
+                console.log(includeKyes.length === 0)
+                console.log(`添加 驻留 value -- 1, ${trackID}`)
+                this.fishHeatMapDurationPoints[[x,y,trackID,timestamp]] = {
+                    x:x,
+                    y:y,
+                    value:1
+                }
+            }
+
+        }
+
         this.props.appStore.updateHeatMapPoints(this.heatMapPoints)
         this.props.appStore.updateHeatMapDurationPoints(this.heatMapDurationPoints)
+
+        this.props.appStore.updateFishHeatMapPoints(this.fishHeatMapPoints)
+        this.props.appStore.updateFishHeatMapDurationPoints(this.fishHeatMapDurationPoints)
     }
 
     _addToTracker (trackerObjs, maxSize) {
@@ -320,7 +399,9 @@ class Template extends React.Component{
 
 
         // mobx autorun 检测 store 的 state 更新 canvas
-        this._update_homte_content_2_1_data(deepCopy(results['bbox']))
+        console.log('获取坐标')
+        console.log(results)
+        this._update_homte_content_2_1_data(deepCopy(results['bbox']), deepCopy(results['bbox_fish']))
         _new_coor_func()
     }
 
@@ -534,16 +615,25 @@ class Template extends React.Component{
 
         //heatMap
         this.heatMapPoints = toJS(this.props.appStore.heatMapPoints || {});
-        //tracker
-        this.trackIDsArr = toJS(this.props.appStore.trackIDsArr || {})
-
         //duratioMheatMap
         this.heatMapDurationPoints = toJS(this.props.appStore.heatMapDurationPoints || {})
 
+        //fish heatMap
+        this.fishHeatMapPoints = toJS(this.props.appStore.fishHeatMapPoints) || {}
+        //heatMapDuration
+        this.fishHeatMapDurationPoints = toJS(this.props.appStore.fishHeatMapDurationPoints) || {}
+
+        //tracker
+        this.trackIDsArr = toJS(this.props.appStore.trackIDsArr || {})
+
+
+
 
         console.log(this.heatMapPoints)
-        console.log(this.trackIDsArr)
         console.log(this.heatMapDurationPoints)
+        console.log(this.fishHeatMapPoints)
+        console.log(this.fishHeatMapDurationPoints)
+        console.log(this.trackIDsArr)
 
 
         console.log(`Init composite wrap`)
@@ -558,7 +648,7 @@ class Template extends React.Component{
         // 测试 先关闭 socket
         this.socket = io(url_socket)
         this.socket.on('new_coor', this._ws_new_coor)
-        this.socket.on('new_state',this._ws_new_state)
+        // this.socket.on('new_state',this._ws_new_state)
 
     }
 
@@ -574,6 +664,8 @@ class Template extends React.Component{
         this.props.appStore.updateHeatMapPoints(this.heatMapPoints)
         this.props.appStore.updateTrackIDsArr(this.trackIDsArr)
         this.props.appStore.updateHeatMapDurationPoints(this.heatMapDurationPoints)
+        this.props.appStore.updateFishHeatMapPoints(this.fishHeatMapPoints)
+        this.props.appStore.updateFishHeatMapDurationPoints(this.fishHeatMapDurationPoints)
 
         console.log('clear composite_template socket')
     }

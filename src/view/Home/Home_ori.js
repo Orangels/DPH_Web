@@ -10,22 +10,18 @@ import Home_content_2_2 from './Home_content_2/Home_content_2_2'
 import Home_content_3_1 from './Home_content_3/Home_content_3_1'
 import Home_content_3_2 from './Home_content_3/Home_content_3_2'
 import Home_content_3_3 from './Home_content_3/Home_content_3_3'
-import Home_content_3_video_canvas from './Home_content_3/Home_content_3_video_canvas'
 
 import Home_content_2_1_canvas from './Home_content_2/Home_content_2_1_canvas'
 
 import {screen_scale_width, screen_scale_height} from "../parameter/parameters";
-import {url, downloadfile, hostname} from '../../common/urls'
+import { url, downloadfile } from '../../common/urls'
 import {Home_data} from './Home_data'
 import Home_content_template from "../../common/Home_content_template";
 import Chart_custom from "../Chart/Chart_custom";
 import Histogram from '../Chart/Histogram'
 import {randomNum, _fetch, deepCopy, _download_file} from "../../common/utils";
 import {inject, observer} from "mobx-react";
-import {Button, Tag} from "antd";
-
-import video from 'video.js';
-import videoSWF from 'videojs-swf/dist/video-js.swf';
+import {Button} from "antd";
 
 const style = {
     content:{
@@ -187,7 +183,7 @@ let home_content_2_2_data = [
 @inject('appStore') @observer
 class Home extends React.Component {
     // 构造
-    constructor(props) {
+      constructor(props) {
         super(props);
         // 初始状态
         this.state = {
@@ -228,13 +224,12 @@ class Home extends React.Component {
             home_content_2_2_update_index:0
         };
         // this._updata_data = this._updata_data.bind(this)
-        this._ws_new_coor = this._ws_new_coor.bind(this)
-        this._ws_new_state = this._ws_new_state.bind(this)
-        this._update_home_content_2_data = this._update_home_content_2_data.bind(this)
-        this.mapClick = this.mapClick.bind(this)
-        this.generatePDF = this.generatePDF.bind(this)
-        this.sync_checkedList = this.sync_checkedList.bind(this)
-    }
+          this._ws_new_coor = this._ws_new_coor.bind(this)
+          this._ws_new_state = this._ws_new_state.bind(this)
+          this._update_home_content_2_data = this._update_home_content_2_data.bind(this)
+          this.mapClick = this.mapClick.bind(this)
+          this.generatePDF = this.generatePDF.bind(this)
+      }
 
     generatePDF(){
         _download_file(downloadfile,{
@@ -251,17 +246,17 @@ class Home extends React.Component {
     }
 
     _update_home_content_2_data(){
-        let index = this.state.home_content_2_2_update_index
-        index = index % (home_content_2_2_data.length)
-        let entry_persons = this.state.home_circle_data.entry[0].count;
-        let exit_persons = this.state.home_circle_data.entry[1].count;
-        let register_persons = this.state.home_circle_data.register[1].count;
+          let index = this.state.home_content_2_2_update_index
+           index = index % (home_content_2_2_data.length)
+          let entry_persons = this.state.home_circle_data.entry[0].count;
+          let exit_persons = this.state.home_circle_data.entry[1].count;
+          let register_persons = this.state.home_circle_data.register[1].count;
 
-        let home_content_2_2_updateData = deepCopy(this.state.home_content_2_2_data)
+          let home_content_2_2_updateData = deepCopy(this.state.home_content_2_2_data)
 
-        home_content_2_2_updateData[index].state = entry_persons;
-        home_content_2_2_updateData[index+1].state = exit_persons;
-        home_content_2_2_updateData[index+2].state = register_persons;
+            home_content_2_2_updateData[index].state = entry_persons;
+            home_content_2_2_updateData[index+1].state = exit_persons;
+            home_content_2_2_updateData[index+2].state = register_persons;
 
         index += 3
         this.setState({
@@ -344,13 +339,6 @@ class Home extends React.Component {
         // this.refs.canvasComponent.wrappedInstance._draw
 
         this.refs.canvasComponent.wrappedInstance._draw();
-        this.refs.Home_content_3_video_canvas.wrappedInstance._draw();
-    }
-
-    sync_checkedList(checkedList){
-        this.refs.Home_content_3_video_canvas.wrappedInstance.setState({
-            checkedList
-        })
     }
 
     componentDidMount() {
@@ -394,25 +382,33 @@ class Home extends React.Component {
     }
 
     render() {
-        return (
-            <Template classTag={'Home'} current_page={0} history={this.props.history}
-                      style={{height:1080*screen_scale_height}}
-                      new_coor={this._ws_new_coor}
-                      ref="totalWrapComponent"
-            >
+          return (
+              <Template classTag={'Home'} current_page={0} history={this.props.history}
+                        style={{height:1080*screen_scale_height}}
+                        new_coor={this._ws_new_coor}
+                        ref="totalWrapComponent"
+              >
+                  {/*<div style={style.content} className={'Home_content_1'}>*/}
+                  {/*    /!*<Home_content_1_1 data={this.state.class_statistical}*!/*/}
+                  {/*    /!*                  home_circle_data={this.state.home_circle_data}*!/*/}
+                  {/*    /!*                  click={this.mapClick}*!/*/}
+                  {/*    /!*                  current_page={this.state.current_page}/>*!/*/}
+                  {/*    /!*<Home_content_1_2 data={Home_data['device_states']}/>*!/*/}
+                  {/*</div>*/}
 
-                <div style={style.content} className={'Home_content_2'}>
-                    {/*<Home_content_2_1 click={this.mapClick} />*/}
-                    <Home_content_2_1_canvas ref="canvasComponent" sync_checkedList={this.sync_checkedList}/>
-                    <Home_content_2_2 data={this.state.home_content_2_2_data}/>
-                </div>
-                <div className={'ls_home_video_wrap'}
-                    style={{...style.content, ...{paddingLeft:10, position:"relative", width:'50%'}}} >
-                    <Home_content_3_video_canvas ref="Home_content_3_video_canvas"/>
-                </div>
-            </Template>
-        )
-    }
+                  <div style={style.content} className={'Home_content_2'}>
+                      {/*<Home_content_2_1 click={this.mapClick} />*/}
+                      <Home_content_2_1_canvas ref="canvasComponent"/>
+                      <Home_content_2_2 data={this.state.home_content_2_2_data}/>
+                  </div>
+                  {/*<div style={style.content} className={'Home_content_3'}>*/}
+                  {/*    <Home_content_3_1 />*/}
+                  {/*    /!*<Home_content_3_2 />*!/*/}
+                  {/*    <Home_content_3_3 />*/}
+                  {/*</div>*/}
+              </Template>
+          )
+      }
 
 }
 export default Home
