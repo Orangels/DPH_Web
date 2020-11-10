@@ -7,12 +7,12 @@ import {model_width} from '../../parameter/parameters'
 
 //旋转了-90 度, 所以计算比例 width height 交换
 let process_rotate = -90
-let process_width = 400
-let legend_top_left = -100*screen_scale_height
-let legend_top_right = -(100-1)*screen_scale_height
+let process_width = 300
+let legend_top_left = -80*screen_scale_height
+let legend_top_right = -(80)*screen_scale_height
 
-let legend_left_top = -100*screen_scale_width
-let legend_right_top = -(100+8)*screen_scale_width
+let legend_left_top = -45*screen_scale_width
+let legend_right_top = -(45+8)*screen_scale_width
 
 
 let text_top_left = -100*screen_scale_height
@@ -59,11 +59,13 @@ class Home_content_2_process extends React.Component {
         return (
             <div style={{
                 // top:96*screen_scale_width,
-                top: 350 * screen_scale_width,
-                left: '32.5%',
+                // top: 350 * screen_scale_width,
+                // top: 320 * screen_scale_width,
+                top: 260 * screen_scale_width,
+                left: '-15%',
                 display: 'flex',
                 flexDirection: 'column',
-                overflowY: 'hidden',
+                // overflowY: 'hidden',
                 position: "absolute",
                 zIndex: 99,
                 transform: `rotate(${process_rotate}deg)`,
@@ -87,13 +89,13 @@ class Home_content_2_process extends React.Component {
                     />
                     <Tag className={'heatMap_legend_0'}
                          color="magenta"
-                          style={{position: "absolute", top: legend_left_top, right: legend_top_left,  transform:`rotate(${process_rotate*-1}deg)`,
+                          style={{position: "absolute", top: legend_left_top, right: legend_top_left,  transform:`rotate(${-process_rotate}deg)`,
                           }}>
                             {heatMapLegend[0]}
                     </Tag>
                     <Tag className={'heatMap_legend_1'}
                          color="magenta"
-                         style={{position: "absolute", bottom: legend_right_top, right: legend_top_right,  transform:`rotate(${process_rotate*-1}deg)`,
+                         style={{position: "absolute", bottom: legend_right_top, left: legend_top_right,  transform:`rotate(${-process_rotate}deg)`,
                          }}>
                         {heatMapLegend[1]}
                     </Tag>

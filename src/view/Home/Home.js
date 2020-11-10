@@ -34,7 +34,7 @@ const style = {
         marginLeft:30*screen_scale_width,
         display:'flex',
         flexDirection:'column',
-        overflowY:'hidden'
+        overflowY:'hidden',
     },
 }
 
@@ -402,12 +402,12 @@ class Home extends React.Component {
                       ref="totalWrapComponent"
             >
 
-                <div style={style.content} className={'Home_content_2'}>
+                <div style={{...style.content, overflow:"visible"}} className={'Home_content_2'}>
                     {/*<Home_content_2_1 click={this.mapClick} />*/}
                     <Home_content_2_1_canvas ref="canvasComponent" sync_checkedList={this.sync_checkedList}/>
                     <Home_content_2_2 data={this.state.home_content_2_2_data}/>
                 </div>
-                <Home_content_2_process />
+                {/*<Home_content_2_process />*/}
                 <div className={'ls_home_video_wrap'}
                     style={{...style.content, ...{paddingLeft:10, position:"relative", width:'50%', marginLeft:0, marginRight:30*screen_scale_width}}} >
                     <Home_content_3_video_canvas ref="Home_content_3_video_canvas"/>

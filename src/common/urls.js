@@ -1,15 +1,15 @@
-export let url = window.location.origin
+// export let url = window.location.origin
 
-// export let url = 'http://192.168.88.84:5000'
+export let url = 'http://192.168.88.84:5000'
 
 // export let url = 'http://127.0.0.1:5000'
 // export let url = 'http://172.16.104.249:5000'
 // export let url = 'http://192.168.88.105:5000'
 // export let hostname = '192.168.88.105'
 
-export let hostname = window.location.hostname
+// export let hostname = window.location.hostname
 
-// export let hostname = '192.168.88.84'
+export let hostname = '192.168.88.84'
 
 export let GET_RTMP_URL = `${url}/get_rtmp_url`
 export let ADD_RTMP_URL = `${url}/add_rtmp_url`

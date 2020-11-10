@@ -7,6 +7,8 @@ import {screen_scale_height, screen_scale_width, trackerColoreMap, personIDColre
 
 import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, heatMapDurationMaxValue, trackerMaxValue, heatMapDuration, plainOptions } from "../../parameter/home_content_2_1_parametere_data"
 
+import Home_content_2_process from './Home_content_2_process'
+
 import {deepCopy, randomNum, dateFormat} from '../../../common/utils'
 import xxs from "../../../asset/test/xxs_icon.jpg";
 import wzh from "../../../asset/test/wzh_icon.jpg";
@@ -484,6 +486,7 @@ class Home_content_2_1_canvas extends React.Component {
                              height:imgHeight
                          }} />
                 </div>
+                <Home_content_2_process />
             </div>
 
         )
