@@ -37,5 +37,5 @@ export let heatMapDuration_radius = 10
 
 export let trackerMaxValue = 50
 
-export let plainOptions = ['显示轨迹', '显示轨迹热力图', '显示驻留时长热力图'];
-export let heatMapLegend = ['轨迹热力图图例', '驻留热力图图例'];
+export let plainOptions = ['轨迹', '轨迹热图', '驻留热图' ,'图例'];
+export let heatMapLegend = ['轨迹热图图例', '驻留热图图例'];

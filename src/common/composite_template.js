@@ -241,7 +241,7 @@ class Template extends React.Component{
                     y:y,
                     value:1
                 };
-            } else if (this.heatMapPoints[[x,y]]< heatMapMaxValue) {
+            } else if (this.heatMapPoints[[x,y]].value < heatMapMaxValue) {
                 this.heatMapPoints[[x,y]] = {
                     x:x,
                     y:y,
@@ -300,19 +300,21 @@ class Template extends React.Component{
         for (let trackerPerson of fish_trackerObjs){
             let {x, y, trackID} = trackerPerson
             // if (trackID >= 10000) continue
+
             if (!this.fishHeatMapPoints[[x,y]]) {
                 this.fishHeatMapPoints[[x,y]] = {
                     x:x,
                     y:y,
                     value:1
                 };
-            } else if (this.fishHeatMapPoints[[x,y]]< heatMapMaxValue) {
+            } else if (this.fishHeatMapPoints[[x,y]].value < heatMapMaxValue) {
                 this.fishHeatMapPoints[[x,y]] = {
                     x:x,
                     y:y,
                     value: this.fishHeatMapPoints[[x,y]].value + 1
                 };
             }
+
 
             let includeKyes = []
 
@@ -396,8 +398,12 @@ class Template extends React.Component{
         }
 
         let timestamp = results['timestamp'] // 1000
+        let entry_count = results['entry_count'] || 0;
+        let leave_count = results['leave_count'] || 0;
+        let pass_count = results['pass_count'] || 0;
         // timestamp = dateFormat(timestamp, 'Y-m-d H:i:s')
         this.props.appStore.updateTrackerTimestamp(timestamp)
+        this.props.appStore.updateStatistics(entry_count, leave_count, pass_count)
 
 
         // mobx autorun 检测 store 的 state 更新 canvas

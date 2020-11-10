@@ -26,13 +26,16 @@ class AppStore {
     @observable home_fishVideo_canvas_width = 710
     @observable home_fishVideo_canvas_height = 710
 
+    @observable entry_count = 0;    //进店人数
+    @observable leave_count = 0;    //离店人数
+    @observable pass_count = 0;     //过店人数
 
-    @action updateEntryPersons(vPersons){
+    @action updateEntryPersons(vPersons) {
         // this.entryPersons = deepCopy(vPersons)
         this.entryPersons = vPersons
     }
 
-    @action updateImgageIcomCoors(vImgageIcomCoors){
+    @action updateImgageIcomCoors(vImgageIcomCoors) {
         this.imgageIcomCoors = deepCopy(vImgageIcomCoors)
     }
 
@@ -53,7 +56,7 @@ class AppStore {
         this.fishHeatMapDurationPoints = deepCopy(vFishHeatMapDurationPoints)
     }
 
-    @action updateHomeFishVideoCanvasSize(vWidth){
+    @action updateHomeFishVideoCanvasSize(vWidth) {
         this.home_fishVideo_canvas_width = vWidth;
     }
 
@@ -61,7 +64,7 @@ class AppStore {
         this.trackIDsArr = deepCopy(vTrackIDsArr)
     }
 
-    @action updateTrackerArr(vTrackerArr){
+    @action updateTrackerArr(vTrackerArr) {
         this.trackerArr = deepCopy(vTrackerArr)
     }
 
@@ -70,13 +73,19 @@ class AppStore {
         this.entruUser = vEntruUser
     }
 
-    @action updateTrackerTimestamp(vTimestamp){
+    @action updateTrackerTimestamp(vTimestamp) {
         this.trackerTimestamp = vTimestamp
     }
 
+    @action updateStatistics(vEntryCount, vLeaveCount, vPassCount) {
+        this.entry_count = vEntryCount;
+        this.leave_count = vLeaveCount;
+        this.pass_count = vPassCount;
+    }
+
     @action initUsers() {
-        const localUsers = localStorage['users']?JSON.parse(localStorage['users']):[]
-        this.users = [{username: 'admin', password: 'admin', auth:0},...localUsers, ...this.users]
+        const localUsers = localStorage['users'] ? JSON.parse(localStorage['users']) : []
+        this.users = [{username: 'admin', password: 'admin', auth: 0}, ...localUsers, ...this.users]
     }
 }
 

@@ -8,6 +8,7 @@ import backgroundBanner from '../../../asset/back_new/数据概览.png'
 import Chart_custom from "../../Chart/Chart_custom";
 import Single_Histogram from '../../Chart/Chart_singleHistogram'
 import Histogram from "../../Chart/Histogram";
+import {inject, observer} from "mobx-react";
 // import backgroundBanner from "../../../asset/stu_back/4_学科分布.png";
 
 let WaterWave_radius = 240 * screen_scale_width
@@ -200,7 +201,8 @@ let home_content_2_2_data = [
     },
 ]
 
-export default class Home_content_2_2 extends React.Component {
+@inject('appStore') @observer
+class Home_content_2_2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -228,8 +230,8 @@ export default class Home_content_2_2 extends React.Component {
     }
 
     render() {
-        let component_text = this.state.state_props
-        let persons_conversion = (this.state.pass_persons + this.state.entry_persons) == 0 ? 0 : parseInt(this.state.entry_persons / (this.state.pass_persons + this.state.entry_persons) * 100)
+        // let {component_text} = this.state.state_props
+        // let persons_conversion = (this.state.pass_persons + this.state.entry_persons) == 0 ? 0 : parseInt(this.state.entry_persons / (this.state.pass_persons + this.state.entry_persons) * 100)
         return (
             <Home_content_template style={{
                 width:810*screen_scale_width,
@@ -267,17 +269,17 @@ export default class Home_content_2_2 extends React.Component {
                     {/*               height={330*screen_scale_height}*/}
                     {/*               width={800*screen_scale_width}/>*/}
                     <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
-                               showText={`${this.state.entry_persons}`}
+                               showText={`${this.props.appStore.entry_count}`}
                                showText_1={`进店人数`}
                                rangeValue={80} />
                     <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
-                               showText={`${this.state.pass_persons}`}
-                               showText_1={`过店人数`}
+                               showText={`${this.props.appStore.leave_count}`}
+                               showText_1={`离店人数`}
                                rangeValue={80} />
                     <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
-                               showText={`${persons_conversion}%`}
-                               showText_1={`转化率`}
-                               rangeValue={persons_conversion} />
+                               showText={`${this.props.appStore.pass_count}`}
+                               showText_1={`过店人数`}
+                               rangeValue={80} />
 
                 </div>
             </Home_content_template>
@@ -285,3 +287,5 @@ export default class Home_content_2_2 extends React.Component {
 
     }
 }
+
+export default Home_content_2_2;

@@ -259,3 +259,22 @@ export let _pointInsideCircle = function pointInsideCircle(point, circle, r) {
     let dy = circle.y - point.y
     return dx * dx + dy * dy <= r * r
 }
+
+/**
+ *
+ * @param num   转换的数字
+ * @param n     补全位数
+ * @returns {*|string}
+ * @private
+ *
+ *
+ */
+
+export let _pad = function pad(num, n) {
+    let len = num.toString().length;
+    while(len < n) {
+        num = "0" + num;
+        len++;
+    }
+    return num;
+}

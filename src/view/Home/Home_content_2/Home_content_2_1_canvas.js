@@ -440,7 +440,7 @@ class Home_content_2_1_canvas extends React.Component {
     render() {
         return (
             <div style={{position: "relative"}} className={'Home_content_2_1_canvas'}>
-                <div style={{position:'absolute', top:0, zIndex:99, color:'#FFFFFF',}}>
+                <div style={{position:'absolute', top:0, left:180*screen_scale_width,zIndex:99, color:'#FFFFFF',}}>
                     <CheckboxGroup
                         options={plainOptions}
                         value={this.state.checkedList}
@@ -448,7 +448,7 @@ class Home_content_2_1_canvas extends React.Component {
                     />
                 </div>
                 <div style={{position:'absolute', top:0, zIndex:99, right:0, backgroundColor:'#FFFFFF', padding:"0px 5px",
-                    borderRadius:5
+                    borderRadius:5, color:'#0907AA'
                 }}>
                     {/*{this.props.appStore.trackerTimestamp}*/}
                     {dateFormat(this.props.appStore.trackerTimestamp, 'Y-m-d H:i:s')}
@@ -486,7 +486,9 @@ class Home_content_2_1_canvas extends React.Component {
                              height:imgHeight
                          }} />
                 </div>
-                <Home_content_2_process />
+                <Home_content_2_process
+                    zIndex={this.state.checkedList.includes(plainOptions[3]) ? 99 : -1}
+                />
             </div>
 
         )
