@@ -1,11 +1,22 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react/index'
-import { toJS , autorun} from 'mobx'
-import { Checkbox } from 'antd';
-import  Heatmap  from 'heatmap.js';
+import {inject, observer} from 'mobx-react/index'
+import {toJS, autorun} from 'mobx'
+import {Checkbox} from 'antd';
+import Heatmap from 'heatmap.js';
 import {screen_scale_height, screen_scale_width, trackerColoreMap, personIDColreMap} from "../../parameter/parameters";
 
-import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, heatMapDurationMaxValue, trackerMaxValue, heatMapDuration, plainOptions } from "../../parameter/home_content_2_1_parametere_data"
+import {
+    imgWidht,
+    imgHeight,
+    iconWidth,
+    iconHeight,
+    heatMapMaxValue,
+    heatMapDurationMaxValue,
+    trackerMaxValue,
+    heatMapDuration,
+    plainOptions,
+    heatmapJSDuration_radius
+} from "../../parameter/home_content_2_1_parametere_data"
 
 import Home_content_2_process from './Home_content_2_process'
 
@@ -36,7 +47,7 @@ class Home_content_2_1_canvas extends React.Component {
         // 初始状态
         this.state = {
             // img: 'http://192.168.88.221:5000/static/staticPic/back.jpg'
-            checkedList:[]
+            checkedList: []
         };
         this._checkBoxOnChange = this._checkBoxOnChange.bind(this)
 
@@ -65,17 +76,17 @@ class Home_content_2_1_canvas extends React.Component {
      * */
     _update_data(rect) {
         let rect_center = deepCopy(rect)
-        let rect_tmp = rect.map((val, index)=>{
-            val.x = Math.ceil(val.x*imgWidht)-iconWidth/2
-            val.y = Math.ceil(val.y*imgHeight)-iconHeight
+        let rect_tmp = rect.map((val, index) => {
+            val.x = Math.ceil(val.x * imgWidht) - iconWidth / 2
+            val.y = Math.ceil(val.y * imgHeight) - iconHeight
             val.PersonID = Math.abs(val.PersonID)
             val.trackID = Math.abs(val.trackID)
             return val
         })
 
-        rect_center = rect_center.map((val, index)=>{
-            val.x = Math.ceil(val.x*imgWidht)
-            val.y = Math.ceil(val.y*imgHeight)
+        rect_center = rect_center.map((val, index) => {
+            val.x = Math.ceil(val.x * imgWidht)
+            val.y = Math.ceil(val.y * imgHeight)
             val.PersonID = Math.abs(val.PersonID)
             val.trackID = Math.abs(val.trackID)
             return val
@@ -100,7 +111,7 @@ class Home_content_2_1_canvas extends React.Component {
         this._addToPoint(deepCopy(rect_center))
     }
 
-    _draw(){
+    _draw() {
 
         this.imgageIcomCoors = toJS(this.props.appStore.imgageIcomCoors || [])
         // //heatMap
@@ -117,7 +128,7 @@ class Home_content_2_1_canvas extends React.Component {
         // this.trackerTimestamp = this.props.appStore.trackerTimestamp
 
         console.log(this.imgageIcomCoors)
-        requestAnimationFrame(()=>{
+        requestAnimationFrame(() => {
             this._drawImage(this.imgageIcomCoors, false)
             this._drawPoint(this.heatMapPoints, this.heatMapDurationPoints)
             this._drawTracker(this.trackerArr)
@@ -157,9 +168,9 @@ class Home_content_2_1_canvas extends React.Component {
             420: ls,
             421: wzh,
             423: xxs,
-            424:hb,
-            425:gy,
-            426:ydh,
+            424: hb,
+            425: gy,
+            426: ydh,
             1: None_person
         }
         this._drawImage([], true)
@@ -202,7 +213,7 @@ class Home_content_2_1_canvas extends React.Component {
             container: document.getElementById('ls_heatmap_duration_canvas'),
 
             // radius: 80,
-            radius: 0,
+            radius: heatmapJSDuration_radius,
 
             maxOpacity: .9,
 
@@ -257,7 +268,7 @@ class Home_content_2_1_canvas extends React.Component {
 
     _getColor(intensity) {
         // var colors = ["#072933", "#2E4045", "#8C593B", "#B2814E", "#FAC268", "#FAD237"];
-        let colors=[
+        let colors = [
             'rgba(255, 17, 5, 0.3)',
             'rgba(255, 142, 12, 0.3)',
             'rgba(255, 221, 11, 0.3)',
@@ -266,14 +277,14 @@ class Home_content_2_1_canvas extends React.Component {
             // 'rgba(18, 255, 233 ,0.5)'
         ];
         colors.reverse()
-        return colors[Math.floor(intensity/2)];
+        return colors[Math.floor(intensity / 2)];
     }
 
     _drawPoint(heatMapPoints, heatMapDurationPoints) {
         let data = []
         let durationDate = []
 
-        for (let heatMapPoint in heatMapPoints){
+        for (let heatMapPoint in heatMapPoints) {
             let result = {}
             result.x = heatMapPoints[heatMapPoint].x
             result.y = heatMapPoints[heatMapPoint].y
@@ -281,12 +292,34 @@ class Home_content_2_1_canvas extends React.Component {
             data.push(result)
         }
 
-        for (let heatMapDurationPoint in heatMapDurationPoints){
+        for (let heatMapDurationPoint in heatMapDurationPoints) {
             let result = {}
             result.x = heatMapDurationPoints[heatMapDurationPoint].x
             result.y = heatMapDurationPoints[heatMapDurationPoint].y
             result.value = parseInt(heatMapDurationPoints[heatMapDurationPoint].value / heatMapDuration)
             durationDate.push(result)
+        }
+
+        //去重 相同 x,y 坐标的值, 取 value 最大值
+        let durationDateUnrepetitionObj = {}
+        let durationDateUnrepetitionArr = []
+        for (let i = 0; i < durationDate.length; i++) {
+            if (durationDateUnrepetitionObj.hasOwnProperty(`${durationDate[i].x},${durationDate[i].y}`)) {
+                if (durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] < durationDate[i].value) {
+                    durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
+                }
+            } else {
+                // durationDateUnrepetitionObj[[durationDate[i].x,durationDate[i].y]]
+                durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
+            }
+        }
+
+        for (let key in durationDateUnrepetitionObj) {
+            durationDateUnrepetitionArr.push({
+                x: parseInt(key.split(',')[0]),
+                y: parseInt(key.split(',')[1]),
+                value: durationDateUnrepetitionObj[key]
+            })
         }
 
         this.heatMap.setData({
@@ -301,7 +334,7 @@ class Home_content_2_1_canvas extends React.Component {
 
             max: heatMapDurationMaxValue,
 
-            data: durationDate
+            data: durationDateUnrepetitionArr
 
         })
         console.log(`CAD duration heatMap`)
@@ -309,19 +342,19 @@ class Home_content_2_1_canvas extends React.Component {
     }
 
     _addToPoint(trackerObjs) {
-        for (let trackerPerson of trackerObjs){
+        for (let trackerPerson of trackerObjs) {
             let {x, y} = trackerPerson
-            if (!this.heatMapPoints[[x,y]]) {
-                this.heatMapPoints[[x,y]] = {
-                    x:x,
-                    y:y,
-                    value:1
+            if (!this.heatMapPoints[[x, y]]) {
+                this.heatMapPoints[[x, y]] = {
+                    x: x,
+                    y: y,
+                    value: 1
                 };
-            } else if (this.heatMapPoints[[x,y]]< heatMapMaxValue) {
-                this.heatMapPoints[[x,y]] = {
-                    x:x,
-                    y:y,
-                    value: this.heatMapPoints[[x,y]].value + 1
+            } else if (this.heatMapPoints[[x, y]] < heatMapMaxValue) {
+                this.heatMapPoints[[x, y]] = {
+                    x: x,
+                    y: y,
+                    value: this.heatMapPoints[[x, y]].value + 1
                 };
             }
         }
@@ -354,33 +387,33 @@ class Home_content_2_1_canvas extends React.Component {
         // }
         // img.src = back;
 
-        personImgs = rect.map((val, index)=> {
+        personImgs = rect.map((val, index) => {
             let personImg = new Image()
             // console.log(val)
             personImg.src = this.personIconDic[val.PersonID]
             return {
-                x:val.x,
-                y:val.y,
-                img:personImg
+                x: val.x,
+                y: val.y,
+                img: personImg
             }
         })
 
-        if (personImgs.length > 0){
-            personImgs[personImgs.length-1].img.onload = () =>{
-                this.rectCache.forEach((val, index)=>{
+        if (personImgs.length > 0) {
+            personImgs[personImgs.length - 1].img.onload = () => {
+                this.rectCache.forEach((val, index) => {
                     // console.log(index)
                     // this.ctx.clearRect(val.x-clearImgWidth, val.y-clearImgWidth, iconWidth+2*clearImgWidth, iconHeight+2*clearImgWidth);
                 })
                 this.ctx.clearRect(0, 0, imgWidht, imgHeight)
 
-                personImgs.forEach((val, index)=>{
+                personImgs.forEach((val, index) => {
                     // console.log(val)
-                    this.ctx.drawImage(val.img,val.x, val.y, iconWidth, iconHeight);
+                    this.ctx.drawImage(val.img, val.x, val.y, iconWidth, iconHeight);
                     // this._addToPoint(val.x, val.y)
                 })
             }
-        }else {
-            this.rectCache.forEach((val, index)=>{
+        } else {
+            this.rectCache.forEach((val, index) => {
                 // console.log(index)
                 // this.ctx.clearRect(val.x-clearImgWidth, val.y-clearImgWidth, iconWidth+2*clearImgWidth, iconHeight+2*clearImgWidth);
             })
@@ -391,17 +424,25 @@ class Home_content_2_1_canvas extends React.Component {
         this.rectCache = rect
     }
 
-    _addToTracker (trackerObjs, maxSize) {
+    _addToTracker(trackerObjs, maxSize) {
 
         let trackerArr = {}
 
-        for (let trackerPerson of trackerObjs){
+        for (let trackerPerson of trackerObjs) {
             let trackID = trackerPerson['trackID']
-            if (this.trackIDsArr.hasOwnProperty(trackID)){
-                this.trackIDsArr[[trackID]].push({x:trackerPerson.x, y: trackerPerson.y, PersonID: trackerPerson.PersonID})
-                this.trackIDsArr[[trackID]]= this.trackIDsArr[[trackID]].slice(-maxSize)
-            }else {
-                this.trackIDsArr[[trackID]]= [{x:trackerPerson.x, y: trackerPerson.y, PersonID: trackerPerson.PersonID}]
+            if (this.trackIDsArr.hasOwnProperty(trackID)) {
+                this.trackIDsArr[[trackID]].push({
+                    x: trackerPerson.x,
+                    y: trackerPerson.y,
+                    PersonID: trackerPerson.PersonID
+                })
+                this.trackIDsArr[[trackID]] = this.trackIDsArr[[trackID]].slice(-maxSize)
+            } else {
+                this.trackIDsArr[[trackID]] = [{
+                    x: trackerPerson.x,
+                    y: trackerPerson.y,
+                    PersonID: trackerPerson.PersonID
+                }]
             }
             trackerArr[[trackID]] = deepCopy(this.trackIDsArr[[trackID]])
         }
@@ -409,15 +450,15 @@ class Home_content_2_1_canvas extends React.Component {
         this._drawTracker(trackerArr)
     }
 
-     _drawTracker(trackerObjs) {
+    _drawTracker(trackerObjs) {
         let colorMap = ['#297E0D', '#7E0D08']
 
-        this.ctx_tracker.clearRect(0,0,imgWidht,imgHeight);
-        for (let trackID in trackerObjs){
+        this.ctx_tracker.clearRect(0, 0, imgWidht, imgHeight);
+        for (let trackID in trackerObjs) {
             let pointsArr = trackerObjs[trackID]
-            for (let i = 0; i < pointsArr.length - 1; i ++){
+            for (let i = 0; i < pointsArr.length - 1; i++) {
                 let startPoint = pointsArr[i]
-                let endPoint = pointsArr[i+1]
+                let endPoint = pointsArr[i + 1]
 
                 let personID = startPoint.PersonID
 
@@ -425,9 +466,9 @@ class Home_content_2_1_canvas extends React.Component {
                 this.ctx_tracker.beginPath()
                 this.ctx_tracker.moveTo(startPoint.x, startPoint.y)
                 this.ctx_tracker.lineTo(endPoint.x, endPoint.y)
-                if (Math.abs(personID) == 420 || Math.abs(personID) == 421 || Math.abs(personID) == 423){
+                if (Math.abs(personID) == 420 || Math.abs(personID) == 421 || Math.abs(personID) == 423) {
                     this.ctx_tracker.strokeStyle = personIDColreMap[[personID]]
-                }else {
+                } else {
                     this.ctx_tracker.strokeStyle = trackerColoreMap[trackID % trackerColoreMap.length]
                 }
                 this.ctx_tracker.lineCap = 'round'
@@ -440,51 +481,69 @@ class Home_content_2_1_canvas extends React.Component {
     render() {
         return (
             <div style={{position: "relative"}} className={'Home_content_2_1_canvas'}>
-                <div style={{position:'absolute', top:0, left:180*screen_scale_width,zIndex:99, color:'#FFFFFF',}}>
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 180 * screen_scale_width,
+                    zIndex: 99,
+                    color: '#FFFFFF',
+                }}>
                     <CheckboxGroup
                         options={plainOptions}
                         value={this.state.checkedList}
                         onChange={this._checkBoxOnChange}
                     />
                 </div>
-                <div style={{position:'absolute', top:0, zIndex:99, right:0, backgroundColor:'#FFFFFF', padding:"0px 5px",
-                    borderRadius:5, color:'#0907AA'
+                <div style={{
+                    position: 'absolute', top: 0, zIndex: 99, right: 0, backgroundColor: '#FFFFFF', padding: "0px 5px",
+                    borderRadius: 5, color: '#0907AA'
                 }}>
                     {/*{this.props.appStore.trackerTimestamp}*/}
                     {dateFormat(this.props.appStore.trackerTimestamp, 'Y-m-d H:i:s')}
                 </div>
                 {/*<img src={back} width={imgWidht} height={imgHeight} style={{zIndex:3}}/>*/}
-                <img src={back} width={imgWidht} height={imgHeight} style={{zIndex:3}}/>
+                <img src={back} width={imgWidht} height={imgHeight} style={{zIndex: 3}}/>
                 <canvas id="lscanvas" width={imgWidht} height={imgHeight}
-                        style={{border:'0px solid #FF1C1F', borderRadius:5, zIndex:29, position:"absolute", top:0}}>
-                </canvas>
-                <canvas id="ls_tracker_canvas" width={imgWidht} height={imgHeight}
-                        style={{border:'0px solid #FF1C1F', borderRadius:5,
-                            zIndex: this.state.checkedList.includes(plainOptions[0]) ? 39 : -1,
-                            position:"absolute", top:0,
+                        style={{
+                            border: '0px solid #FF1C1F',
+                            borderRadius: 5,
+                            zIndex: 29,
+                            position: "absolute",
+                            top: 0
                         }}>
                 </canvas>
-                <div className={`ls_heatmap_canvas_wrap`} style={{position:"absolute", top:0,
+                <canvas id="ls_tracker_canvas" width={imgWidht} height={imgHeight}
+                        style={{
+                            border: '0px solid #FF1C1F', borderRadius: 5,
+                            zIndex: this.state.checkedList.includes(plainOptions[0]) ? 39 : -1,
+                            position: "absolute", top: 0,
+                        }}>
+                </canvas>
+                <div className={`ls_heatmap_canvas_wrap`} style={{
+                    position: "absolute", top: 0,
                     // zIndex: this.state.checkedList.includes(plainOptions[1]) ? 19 : -1,
                 }}>
                     <div id="ls_heatmap_canvas"
-                         style={{border:'0px solid #FF1C1F', borderRadius:5,
+                         style={{
+                             border: '0px solid #FF1C1F', borderRadius: 5,
                              zIndex: this.state.checkedList.includes(plainOptions[1]) ? 19 : -1,
-                             position:"absolute", top:0,
-                             width:imgWidht,
-                             height:imgHeight
-                         }} />
+                             position: "absolute", top: 0,
+                             width: imgWidht,
+                             height: imgHeight
+                         }}/>
                 </div>
-                <div className={`ls_heatmap_duration_canvas_wrap`} style={{position:"absolute", top:0,
+                <div className={`ls_heatmap_duration_canvas_wrap`} style={{
+                    position: "absolute", top: 0,
                     // zIndex: this.state.checkedList.includes(plainOptions[1]) ? 19 : -1,
                 }}>
                     <div id="ls_heatmap_duration_canvas"
-                         style={{border:'0px solid #FF1C1F', borderRadius:5,
+                         style={{
+                             border: '0px solid #FF1C1F', borderRadius: 5,
                              zIndex: this.state.checkedList.includes(plainOptions[2]) ? 9 : -1,
-                             position:"absolute", top:0,
-                             width:imgWidht,
-                             height:imgHeight
-                         }} />
+                             position: "absolute", top: 0,
+                             width: imgWidht,
+                             height: imgHeight
+                         }}/>
                 </div>
                 <Home_content_2_process
                     zIndex={this.state.checkedList.includes(plainOptions[3]) ? 99 : -1}

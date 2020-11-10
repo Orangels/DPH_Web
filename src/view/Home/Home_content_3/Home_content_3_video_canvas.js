@@ -13,7 +13,8 @@ import {
     heatMapDurationMaxValue,
     imgHeight,
     imgWidht,
-    plainOptions
+    plainOptions,
+    heatmapJSDuration_radius
 } from "../../parameter/home_content_2_1_parametere_data";
 import Heatmap from "heatmap.js";
 
@@ -61,8 +62,36 @@ class Home_content_3_video_canvas extends React.Component {
             result.x = heatMapDurationPoints[heatMapDurationPoint].x
             result.y = heatMapDurationPoints[heatMapDurationPoint].y
             result.value = parseInt(heatMapDurationPoints[heatMapDurationPoint].value / heatMapDuration)
+            // result.value = parseInt(heatMapDurationPoints[heatMapDurationPoint].value)
             durationDate.push(result)
         }
+
+        //去重 相同 x,y 坐标的值, 取 value 最大值
+        let durationDateUnrepetitionObj = {}
+        let durationDateUnrepetitionArr = []
+        for (let i = 0; i < durationDate.length; i++){
+            if (durationDateUnrepetitionObj.hasOwnProperty(`${durationDate[i].x},${durationDate[i].y}`)){
+                if (durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] < durationDate[i].value){
+                    durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
+                }
+            }else {
+                // durationDateUnrepetitionObj[[durationDate[i].x,durationDate[i].y]]
+                durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
+            }
+        }
+
+        for (let key in durationDateUnrepetitionObj) {
+            console.log('~~~~')
+            console.log(durationDateUnrepetitionObj[key])
+            durationDateUnrepetitionArr.push({
+                x:parseInt(key.split(',')[0]),
+                y:parseInt(key.split(',')[1]),
+                value: durationDateUnrepetitionObj[key]
+            })
+        }
+
+        // console.log('去重 heatmap')
+        // console.log(durationDateUnrepetitionArr)
 
         this.heatMap.setData({
 
@@ -76,7 +105,7 @@ class Home_content_3_video_canvas extends React.Component {
 
             max: heatMapDurationMaxValue,
 
-            data: durationDate
+            data: durationDateUnrepetitionArr
 
         })
     }
@@ -152,7 +181,7 @@ class Home_content_3_video_canvas extends React.Component {
                 container: document.getElementById('ls_fishVideo_heatmap_duration_canvas'),
 
                 // radius: 80,
-                radius: 0,
+                radius: heatmapJSDuration_radius,
 
                 maxOpacity: .9,
 

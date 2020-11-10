@@ -37,5 +37,8 @@ export let heatMapDuration_radius = 10
 
 export let trackerMaxValue = 50
 
+// heatmap.js 关于驻留热图的光圈半径
+export let heatmapJSDuration_radius = 10
+
 export let plainOptions = ['轨迹', '轨迹热图', '驻留热图' ,'图例'];
 export let heatMapLegend = ['轨迹热图图例', '驻留热图图例'];
