@@ -229,7 +229,7 @@ export default class Home_content_2_2 extends React.Component {
 
     render() {
         let component_text = this.state.state_props
-        let persons_conversion = this.state.pass_persons == 0 ? 0 : parseInt(this.state.entry_persons / this.state.pass_persons * 100)
+        let persons_conversion = (this.state.pass_persons + this.state.entry_persons) == 0 ? 0 : parseInt(this.state.entry_persons / (this.state.pass_persons + this.state.entry_persons) * 100)
         return (
             <Home_content_template style={{
                 width:810*screen_scale_width,

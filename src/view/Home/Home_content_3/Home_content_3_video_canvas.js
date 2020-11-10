@@ -10,6 +10,7 @@ import {hostname} from "../../../common/urls";
 import {
     heatMapDuration,
     heatMapMaxValue,
+    heatMapDurationMaxValue,
     imgHeight,
     imgWidht,
     plainOptions
@@ -73,7 +74,7 @@ class Home_content_3_video_canvas extends React.Component {
 
         this.durantionHeatMap.setData({
 
-            max: heatMapMaxValue,
+            max: heatMapDurationMaxValue,
 
             data: durationDate
 
@@ -107,6 +108,8 @@ class Home_content_3_video_canvas extends React.Component {
         let canvas_width = document.getElementsByClassName('ls_home_fishVideo')[0].clientWidth;
         let canvas_height = document.getElementsByClassName('ls_home_fishVideo')[0].clientHeight;
 
+        this.props.appStore.updateHomeFishVideoCanvasSize(canvas_width);
+
         this.setState({
             canvas_width,
             canvas_height
@@ -135,7 +138,7 @@ class Home_content_3_video_canvas extends React.Component {
 
                     '.4': '#94E149',
 
-                    '.82': '#CDDE40',
+                    '.8': '#CDDE40',
 
                     '1': '#ED6B44'
 
@@ -161,13 +164,13 @@ class Home_content_3_video_canvas extends React.Component {
 
                 gradient: {
 
-                    '.1': '#32A933',
+                    '.2': '#32A933',
 
-                    '.2': '#3ACB49',
+                    '.4': '#3ACB49',
 
-                    '.4': '#94E149',
+                    '.6': '#94E149',
 
-                    '.82': '#CDDE40',
+                    '.8': '#CDDE40',
 
                     '1': '#ED6B44'
 

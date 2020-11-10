@@ -174,6 +174,8 @@ class Template extends React.Component{
      * */
     _update_homte_content_2_1_data(rect, rect_fish) {
 
+        let home_fishVideo_canvas_width = toJS(this.props.appStore.home_fishVideo_canvas_width)
+
         let rect_center = deepCopy(rect)
         let rect_fish_center = deepCopy(rect_fish)
 
@@ -196,8 +198,8 @@ class Template extends React.Component{
         })
 
         rect_fish_center = rect_fish_center.map((val, index)=>{
-            val.x = Math.ceil(val.x*710)
-            val.y = Math.ceil(val.y*710)
+            val.x = Math.ceil(val.x*home_fishVideo_canvas_width)
+            val.y = Math.ceil(val.y*home_fishVideo_canvas_width)
             val.PersonID = Math.abs(val.PersonID)
             // val.trackID = Math.abs(val.trackID)
             val.trackID = Number(val.trackID)

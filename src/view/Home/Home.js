@@ -13,6 +13,7 @@ import Home_content_3_3 from './Home_content_3/Home_content_3_3'
 import Home_content_3_video_canvas from './Home_content_3/Home_content_3_video_canvas'
 
 import Home_content_2_1_canvas from './Home_content_2/Home_content_2_1_canvas'
+import Home_content_2_process from './Home_content_2/Home_content_2_process'
 
 import {screen_scale_width, screen_scale_height} from "../parameter/parameters";
 import {url, downloadfile, hostname} from '../../common/urls'
@@ -22,7 +23,7 @@ import Chart_custom from "../Chart/Chart_custom";
 import Histogram from '../Chart/Histogram'
 import {randomNum, _fetch, deepCopy, _download_file} from "../../common/utils";
 import {inject, observer} from "mobx-react";
-import {Button, Tag} from "antd";
+import {Button, Tag, Progress} from "antd";
 
 import video from 'video.js';
 import videoSWF from 'videojs-swf/dist/video-js.swf';
@@ -396,7 +397,7 @@ class Home extends React.Component {
     render() {
         return (
             <Template classTag={'Home'} current_page={0} history={this.props.history}
-                      style={{height:1080*screen_scale_height}}
+                      style={{height:1080*screen_scale_height, justifyContent:'space-between', position:'relative'}}
                       new_coor={this._ws_new_coor}
                       ref="totalWrapComponent"
             >
@@ -406,8 +407,9 @@ class Home extends React.Component {
                     <Home_content_2_1_canvas ref="canvasComponent" sync_checkedList={this.sync_checkedList}/>
                     <Home_content_2_2 data={this.state.home_content_2_2_data}/>
                 </div>
+                <Home_content_2_process />
                 <div className={'ls_home_video_wrap'}
-                    style={{...style.content, ...{paddingLeft:10, position:"relative", width:'50%'}}} >
+                    style={{...style.content, ...{paddingLeft:10, position:"relative", width:'50%', marginLeft:0, marginRight:30*screen_scale_width}}} >
                     <Home_content_3_video_canvas ref="Home_content_3_video_canvas"/>
                 </div>
             </Template>

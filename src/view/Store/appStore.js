@@ -23,6 +23,9 @@ class AppStore {
 
     @observable entruUser = []
 
+    @observable home_fishVideo_canvas_width = 710
+    @observable home_fishVideo_canvas_height = 710
+
 
     @action updateEntryPersons(vPersons){
         // this.entryPersons = deepCopy(vPersons)
@@ -48,6 +51,10 @@ class AppStore {
 
     @action updateFishHeatMapDurationPoints(vFishHeatMapDurationPoints) {
         this.fishHeatMapDurationPoints = deepCopy(vFishHeatMapDurationPoints)
+    }
+
+    @action updateHomeFishVideoCanvasSize(vWidth){
+        this.home_fishVideo_canvas_width = vWidth;
     }
 
     @action updateTrackIDsArr(vTrackIDsArr) {

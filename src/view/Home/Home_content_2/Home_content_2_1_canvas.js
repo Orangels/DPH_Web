@@ -5,7 +5,7 @@ import { Checkbox } from 'antd';
 import  Heatmap  from 'heatmap.js';
 import {screen_scale_height, screen_scale_width, trackerColoreMap, personIDColreMap} from "../../parameter/parameters";
 
-import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, trackerMaxValue, heatMapDuration, plainOptions } from "../../parameter/home_content_2_1_parametere_data"
+import { imgWidht, imgHeight, iconWidth, iconHeight, heatMapMaxValue, heatMapDurationMaxValue, trackerMaxValue, heatMapDuration, plainOptions } from "../../parameter/home_content_2_1_parametere_data"
 
 import {deepCopy, randomNum, dateFormat} from '../../../common/utils'
 import xxs from "../../../asset/test/xxs_icon.jpg";
@@ -15,8 +15,9 @@ import gy from "../../../asset/test/gy_icon.jpg";
 import ydh from "../../../asset/test/ydh_icon.jpg";
 import hb from "../../../asset/test/hb_icon.jpg";
 import None_person from "../../../asset/test/none_person.jpg";
-import back from "../../../asset/test/world_clear.jpg";
-import back_wiwide from "../../../asset/test/world_wiwide.jpg";
+// import back from "../../../asset/test/world_clear.jpg";
+// import back_wiwide from "../../../asset/test/world_wiwide.jpg";
+import back from "../../../asset/test/ysld_1115.jpg";
 
 import './Home_content_2_1_canvas.css'
 
@@ -185,7 +186,7 @@ class Home_content_2_1_canvas extends React.Component {
 
                 '.4': '#94E149',
 
-                '.82': '#CDDE40',
+                '.8': '#CDDE40',
 
                 '1': '#ED6B44'
 
@@ -211,13 +212,13 @@ class Home_content_2_1_canvas extends React.Component {
 
             gradient: {
 
-                '.1': '#32A933',
+                '.2': '#32A933',
 
-                '.2': '#3ACB49',
+                '.4': '#3ACB49',
 
-                '.4': '#94E149',
+                '.6': '#94E149',
 
-                '.82': '#CDDE40',
+                '.8': '#CDDE40',
 
                 '1': '#ED6B44'
 
@@ -296,7 +297,7 @@ class Home_content_2_1_canvas extends React.Component {
 
         this.durantionHeatMap.setData({
 
-            max: heatMapMaxValue,
+            max: heatMapDurationMaxValue,
 
             data: durationDate
 
@@ -451,7 +452,7 @@ class Home_content_2_1_canvas extends React.Component {
                     {dateFormat(this.props.appStore.trackerTimestamp, 'Y-m-d H:i:s')}
                 </div>
                 {/*<img src={back} width={imgWidht} height={imgHeight} style={{zIndex:3}}/>*/}
-                <img src={back_wiwide} width={imgWidht} height={imgHeight} style={{zIndex:3}}/>
+                <img src={back} width={imgWidht} height={imgHeight} style={{zIndex:3}}/>
                 <canvas id="lscanvas" width={imgWidht} height={imgHeight}
                         style={{border:'0px solid #FF1C1F', borderRadius:5, zIndex:29, position:"absolute", top:0}}>
                 </canvas>
