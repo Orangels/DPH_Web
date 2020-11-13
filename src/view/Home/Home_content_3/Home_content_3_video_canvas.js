@@ -81,8 +81,8 @@ class Home_content_3_video_canvas extends React.Component {
         }
 
         for (let key in durationDateUnrepetitionObj) {
-            console.log('~~~~')
-            console.log(durationDateUnrepetitionObj[key])
+            // console.log('~~~~')
+            // console.log(durationDateUnrepetitionObj[key])
             durationDateUnrepetitionArr.push({
                 x:parseInt(key.split(',')[0]),
                 y:parseInt(key.split(',')[1]),

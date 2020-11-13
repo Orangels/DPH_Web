@@ -1266,7 +1266,7 @@ class DrawLayer extends React.Component {
             let colorStyle = btnDisable ? {color:'#7E0D08'} : {}
 
             return (
-                <Button style={{...{width:'50%',}, ...colorStyle}} type={btnType} disabled={btnDisable}
+                <Button style={{...{width: 100,}, ...colorStyle}} type={btnType} disabled={btnDisable}
                         onClick={this._btnClick.bind(this, index)}
                 >{val}</Button>
             )
@@ -1308,70 +1308,72 @@ class DrawLayer extends React.Component {
                                     }}/>
                         </div>
                         <Tabs defaultActiveKey="1" onChange={this._changeTab} style={{width:'100%', padding:"5px 20px"}} type="card">
-                            <TabPane tab="热力图" key="heatMap">
-                                <Row type="flex" justify="space-around"
+                            <TabPane tab="有效区域" key="heatMap">
+                                <Row type="flex" justify="space-between"
                                      style={{
                                          // backgroundColor:'#CECECE',
-                                         height: 135/0.75*screen_scale_width, borderRadius:5}}>
-                                    <Col span={6} style={{display:'flex', flexDirection:'column', justifyContent:'space-around',
-                                        height:'100%'
+                                         height: 135/0.75*screen_scale_width, borderRadius:5, overflow:'scroll'}}>
+                                    <Col span={12} style={{display:'flex',
+                                        // flexDirection:'column',
+                                        justifyContent:'space-between',
+                                        height:'100%', overflow:'scroll'
                                     }}>
                                         {DrawBtn}
                                     </Col>
-                                    <Col span={11} style={{display: 'flex', flexDirection:'column', }}>
-                                        <Form layout='horizontal' style={{margin: '0 auto'}}
-                                            // onSubmit={this.handleSubmit}
-                                        >
-                                            {
-                                                this.state.selectImg.polygon.map((val, index)=>{
-                                                    return (
-                                                        <Row gutter={8}>
-                                                            <Col span={20}>
-                                                                <FormItem label='名称: ' labelCol={{xs: {span: 24},
-                                                                    sm: {span: 8, offset:0},}}
-                                                                          wrapperCol={{
-                                                                              xs: {span: 24},
-                                                                              sm: {span: 10},
-                                                                          }}
-                                                                >
-                                                                    {
-                                                                        getFieldDecorator(`location_name_heatMap_${index}`, {
-                                                                            initialValue:`区域 ${index}`,
-                                                                            rules: [
-                                                                                {
-                                                                                    required: true,
-                                                                                    message: '区域名称'
-                                                                                }
-                                                                            ]
-                                                                        })(
-                                                                            <Input disabled={this.state.selectBtn == -1 ? true : false}/>
-                                                                        )
-                                                                    }
-                                                                </FormItem>
-                                                            </Col>
-                                                            {/*<Col span={12}>*/}
-                                                            {/*    <FormItem label='告警时长阈值: ' {...formItemLayout}>*/}
-                                                            {/*        {*/}
-                                                            {/*            getFieldDecorator('ip', {*/}
-                                                            {/*                initialValue:`120 `,*/}
-                                                            {/*                rules: [*/}
-                                                            {/*                    {*/}
-                                                            {/*                        required: true,*/}
-                                                            {/*                        message: '告警时长'*/}
-                                                            {/*                    }*/}
-                                                            {/*                ]*/}
-                                                            {/*            })(*/}
-                                                            {/*                <Input disabled={this.state.selectBtn == -1 ? true : false}/>*/}
-                                                            {/*            )*/}
-                                                            {/*        }*/}
-                                                            {/*    </FormItem>*/}
-                                                            {/*</Col>*/}
-                                                        </Row>
-                                                    )
-                                                })
-                                            }
-                                        </Form>
-                                    </Col>
+                                    {/*<Col span={11} style={{display: 'flex', flexDirection:'column', }}>*/}
+                                        {/*<Form layout='horizontal' style={{margin: '0 auto'}}*/}
+                                        {/*    // onSubmit={this.handleSubmit}*/}
+                                        {/*>*/}
+                                        {/*    {*/}
+                                        {/*        this.state.selectImg.polygon.map((val, index)=>{*/}
+                                        {/*            return (*/}
+                                        {/*                <Row gutter={8}>*/}
+                                        {/*                    <Col span={20}>*/}
+                                        {/*                        <FormItem label='名称: ' labelCol={{xs: {span: 24},*/}
+                                        {/*                            sm: {span: 8, offset:0},}}*/}
+                                        {/*                                  wrapperCol={{*/}
+                                        {/*                                      xs: {span: 24},*/}
+                                        {/*                                      sm: {span: 10},*/}
+                                        {/*                                  }}*/}
+                                        {/*                        >*/}
+                                        {/*                            {*/}
+                                        {/*                                getFieldDecorator(`location_name_heatMap_${index}`, {*/}
+                                        {/*                                    initialValue:`区域 ${index}`,*/}
+                                        {/*                                    rules: [*/}
+                                        {/*                                        {*/}
+                                        {/*                                            required: true,*/}
+                                        {/*                                            message: '区域名称'*/}
+                                        {/*                                        }*/}
+                                        {/*                                    ]*/}
+                                        {/*                                })(*/}
+                                        {/*                                    <Input disabled={this.state.selectBtn == -1 ? true : false}/>*/}
+                                        {/*                                )*/}
+                                        {/*                            }*/}
+                                        {/*                        </FormItem>*/}
+                                        {/*                    </Col>*/}
+                                        {/*                    /!*<Col span={12}>*!/*/}
+                                        {/*                    /!*    <FormItem label='告警时长阈值: ' {...formItemLayout}>*!/*/}
+                                        {/*                    /!*        {*!/*/}
+                                        {/*                    /!*            getFieldDecorator('ip', {*!/*/}
+                                        {/*                    /!*                initialValue:`120 `,*!/*/}
+                                        {/*                    /!*                rules: [*!/*/}
+                                        {/*                    /!*                    {*!/*/}
+                                        {/*                    /!*                        required: true,*!/*/}
+                                        {/*                    /!*                        message: '告警时长'*!/*/}
+                                        {/*                    /!*                    }*!/*/}
+                                        {/*                    /!*                ]*!/*/}
+                                        {/*                    /!*            })(*!/*/}
+                                        {/*                    /!*                <Input disabled={this.state.selectBtn == -1 ? true : false}/>*!/*/}
+                                        {/*                    /!*            )*!/*/}
+                                        {/*                    /!*        }*!/*/}
+                                        {/*                    /!*    </FormItem>*!/*/}
+                                        {/*                    /!*</Col>*!/*/}
+                                        {/*                </Row>*/}
+                                        {/*            )*/}
+                                        {/*        })*/}
+                                        {/*    }*/}
+                                        {/*</Form>*/}
+                                    {/*</Col>*/}
                                     <Col span={6} style={{display:'flex', justifyContent:'space-around',
                                         height:'100%', marginTop:10*screen_scale_width
                                     }}>
@@ -1385,71 +1387,73 @@ class DrawLayer extends React.Component {
                                     </Col>
                                 </Row>
                             </TabPane>
-                            <TabPane tab="驻留观察" key="hesitate">
+                            <TabPane tab="过店区域" key="hesitate">
                                 <Row style={{
                                     // backgroundColor:'#CECECE',
                                     height: 135/0.75*screen_scale_width, borderRadius:5}}>
-                                    <Row type="flex" justify="space-around"
+                                    <Row type="flex" justify="space-between"
                                          style={{
                                              // backgroundColor:'#CECECE',
                                              height: 135/0.75*screen_scale_width, borderRadius:5}}>
-                                        <Col span={6} style={{display:'flex', flexDirection:'column', justifyContent:'space-around',
+                                        <Col span={12} style={{display:'flex',
+                                            // flexDirection:'column',
+                                            justifyContent:'space-between',
                                             height:'100%'
                                         }}>
                                             {DrawBtn}
                                         </Col>
-                                        <Col span={11}>
-                                            <Form layout='horizontal' style={{margin: '0 auto'}} onSubmit={this.handleSubmit}>
-                                                {
-                                                    this.state.selectImg.polygon.map((val, index)=>{
-                                                        return (
-                                                            <Row gutter={8}>
-                                                                <Col span={12}>
-                                                                    <FormItem label='名称: ' labelCol={{xs: {span: 24},
-                                                                        sm: {span: 8, offset:0},}}
-                                                                              wrapperCol={{
-                                                                                  xs: {span: 24},
-                                                                                  sm: {span: 10},
-                                                                              }}
-                                                                    >
-                                                                        {
-                                                                            getFieldDecorator(`location_name_hesitate_${index}`, {
-                                                                                initialValue:`区域 ${index}`,
-                                                                                rules: [
-                                                                                    {
-                                                                                        required: true,
-                                                                                        message: '区域名称'
-                                                                                    }
-                                                                                ]
-                                                                            })(
-                                                                                <Input disabled={this.state.selectBtn == -1 ? true : false}/>
-                                                                            )
-                                                                        }
-                                                                    </FormItem>
-                                                                </Col>
-                                                                <Col span={12}>
-                                                                    <FormItem label='告警时长(秒): ' {...formItemLayout}>
-                                                                        {
-                                                                            getFieldDecorator(`duration_${index}`, {
-                                                                                initialValue: this.state.selectImg.duration[index],
-                                                                                rules: [
-                                                                                    {
-                                                                                        required: true,
-                                                                                        message: '告警时长'
-                                                                                    }
-                                                                                ]
-                                                                            })(
-                                                                                <Input disabled={this.state.selectBtn == -1 ? true : false}/>
-                                                                            )
-                                                                        }
-                                                                    </FormItem>
-                                                                </Col>
-                                                            </Row>
-                                                        )
-                                                    })
-                                                }
-                                            </Form>
-                                        </Col>
+                                        {/*<Col span={11}>*/}
+                                            {/*<Form layout='horizontal' style={{margin: '0 auto'}} onSubmit={this.handleSubmit}>*/}
+                                            {/*    {*/}
+                                            {/*        this.state.selectImg.polygon.map((val, index)=>{*/}
+                                            {/*            return (*/}
+                                            {/*                <Row gutter={8}>*/}
+                                            {/*                    <Col span={12}>*/}
+                                            {/*                        <FormItem label='名称: ' labelCol={{xs: {span: 24},*/}
+                                            {/*                            sm: {span: 8, offset:0},}}*/}
+                                            {/*                                  wrapperCol={{*/}
+                                            {/*                                      xs: {span: 24},*/}
+                                            {/*                                      sm: {span: 10},*/}
+                                            {/*                                  }}*/}
+                                            {/*                        >*/}
+                                            {/*                            {*/}
+                                            {/*                                getFieldDecorator(`location_name_hesitate_${index}`, {*/}
+                                            {/*                                    initialValue:`区域 ${index}`,*/}
+                                            {/*                                    rules: [*/}
+                                            {/*                                        {*/}
+                                            {/*                                            required: true,*/}
+                                            {/*                                            message: '区域名称'*/}
+                                            {/*                                        }*/}
+                                            {/*                                    ]*/}
+                                            {/*                                })(*/}
+                                            {/*                                    <Input disabled={this.state.selectBtn == -1 ? true : false}/>*/}
+                                            {/*                                )*/}
+                                            {/*                            }*/}
+                                            {/*                        </FormItem>*/}
+                                            {/*                    </Col>*/}
+                                            {/*                    <Col span={12}>*/}
+                                            {/*                        <FormItem label='告警时长(秒): ' {...formItemLayout}>*/}
+                                            {/*                            {*/}
+                                            {/*                                getFieldDecorator(`duration_${index}`, {*/}
+                                            {/*                                    initialValue: this.state.selectImg.duration[index],*/}
+                                            {/*                                    rules: [*/}
+                                            {/*                                        {*/}
+                                            {/*                                            required: true,*/}
+                                            {/*                                            message: '告警时长'*/}
+                                            {/*                                        }*/}
+                                            {/*                                    ]*/}
+                                            {/*                                })(*/}
+                                            {/*                                    <Input disabled={this.state.selectBtn == -1 ? true : false}/>*/}
+                                            {/*                                )*/}
+                                            {/*                            }*/}
+                                            {/*                        </FormItem>*/}
+                                            {/*                    </Col>*/}
+                                            {/*                </Row>*/}
+                                            {/*            )*/}
+                                            {/*        })*/}
+                                            {/*    }*/}
+                                            {/*</Form>*/}
+                                        {/*</Col>*/}
                                         <Col span={6} style={{display:'flex', justifyContent:'space-around',
                                             height:'100%', marginTop:10*screen_scale_width
                                         }}>
@@ -1464,74 +1468,74 @@ class DrawLayer extends React.Component {
                                     </Row>
                                 </Row>
                             </TabPane>
-                            <TabPane tab="卡口计数" key="counting">
-                                <Row style={{
-                                    // backgroundColor:'#CECECE',
-                                    height: 135/0.75*screen_scale_width, borderRadius:5}}>
-                                    <Row style={{
-                                        // backgroundColor:'#CECECE',
-                                        height: 135/0.75*screen_scale_width, borderRadius:5}}>
-                                        <Row type="flex" justify="space-around"
-                                             style={{
-                                                 // backgroundColor:'#CECECE',
-                                                 height: 135/0.75*screen_scale_width, borderRadius:5}}>
-                                            <Col span={6} style={{display:'flex', flexDirection:'column', justifyContent:'space-around',
-                                                height:'100%'
-                                            }}>
-                                                {DrawBtn}
-                                            </Col>
-                                            <Col span={11}>
-                                                <Form layout='horizontal' style={{margin: '0 auto'}}
-                                                    // onSubmit={this.handleSubmit}
-                                                >
-                                                    {
-                                                        this.state.selectImg.polygon.map((val, index)=>{
-                                                            return (
-                                                                <Row gutter={8}>
-                                                                    <Col span={12}>
-                                                                        <FormItem label='名称: ' labelCol={{xs: {span: 24},
-                                                                            sm: {span: 8, offset:0},}}
-                                                                                  wrapperCol={{
-                                                                                      xs: {span: 24},
-                                                                                      sm: {span: 10},
-                                                                                  }}
-                                                                        >
-                                                                            {
-                                                                                getFieldDecorator(`location_name_counting_${index}`, {
-                                                                                    initialValue:`区域 ${index}`,
-                                                                                    rules: [
-                                                                                        {
-                                                                                            required: true,
-                                                                                            message: '区域名称'
-                                                                                        }
-                                                                                    ]
-                                                                                })(
-                                                                                    <Input disabled={this.state.selectBtn == -1 ? true : false}/>
-                                                                                )
-                                                                            }
-                                                                        </FormItem>
-                                                                    </Col>
-                                                                </Row>
-                                                            )
-                                                        })
-                                                    }
-                                                </Form>
-                                            </Col>
-                                            <Col span={6} style={{display:'flex', justifyContent:'space-around',
-                                                height:'100%', marginTop:10*screen_scale_width
-                                            }}>
-                                                <Button style={{width:'50%', marginLeft:20*screen_scale_width}} type="primary"
-                                                        onClick={this._btnConfirm}
-                                                        disabled={this.state.selectBtn == -1 ? true : false}
-                                                >确定</Button>
-                                                <Button style={{width:'50%', marginLeft:20*screen_scale_width}} type="danger"
-                                                        onClick={this._btnCancel}
-                                                >取消</Button>
-                                            </Col>
-                                        </Row>
-                                    </Row>
-                                </Row>
-                            </TabPane>
+                            {/*<TabPane tab="卡口计数" key="counting">*/}
+                            {/*    <Row style={{*/}
+                            {/*        // backgroundColor:'#CECECE',*/}
+                            {/*        height: 135/0.75*screen_scale_width, borderRadius:5}}>*/}
+                            {/*        <Row style={{*/}
+                            {/*            // backgroundColor:'#CECECE',*/}
+                            {/*            height: 135/0.75*screen_scale_width, borderRadius:5}}>*/}
+                            {/*            <Row type="flex" justify="space-around"*/}
+                            {/*                 style={{*/}
+                            {/*                     // backgroundColor:'#CECECE',*/}
+                            {/*                     height: 135/0.75*screen_scale_width, borderRadius:5}}>*/}
+                            {/*                <Col span={6} style={{display:'flex', flexDirection:'column', justifyContent:'space-around',*/}
+                            {/*                    height:'100%'*/}
+                            {/*                }}>*/}
+                            {/*                    {DrawBtn}*/}
+                            {/*                </Col>*/}
+                            {/*                <Col span={11}>*/}
+                            {/*                    <Form layout='horizontal' style={{margin: '0 auto'}}*/}
+                            {/*                        // onSubmit={this.handleSubmit}*/}
+                            {/*                    >*/}
+                            {/*                        {*/}
+                            {/*                            this.state.selectImg.polygon.map((val, index)=>{*/}
+                            {/*                                return (*/}
+                            {/*                                    <Row gutter={8}>*/}
+                            {/*                                        <Col span={12}>*/}
+                            {/*                                            <FormItem label='名称: ' labelCol={{xs: {span: 24},*/}
+                            {/*                                                sm: {span: 8, offset:0},}}*/}
+                            {/*                                                      wrapperCol={{*/}
+                            {/*                                                          xs: {span: 24},*/}
+                            {/*                                                          sm: {span: 10},*/}
+                            {/*                                                      }}*/}
+                            {/*                                            >*/}
+                            {/*                                                {*/}
+                            {/*                                                    getFieldDecorator(`location_name_counting_${index}`, {*/}
+                            {/*                                                        initialValue:`区域 ${index}`,*/}
+                            {/*                                                        rules: [*/}
+                            {/*                                                            {*/}
+                            {/*                                                                required: true,*/}
+                            {/*                                                                message: '区域名称'*/}
+                            {/*                                                            }*/}
+                            {/*                                                        ]*/}
+                            {/*                                                    })(*/}
+                            {/*                                                        <Input disabled={this.state.selectBtn == -1 ? true : false}/>*/}
+                            {/*                                                    )*/}
+                            {/*                                                }*/}
+                            {/*                                            </FormItem>*/}
+                            {/*                                        </Col>*/}
+                            {/*                                    </Row>*/}
+                            {/*                                )*/}
+                            {/*                            })*/}
+                            {/*                        }*/}
+                            {/*                    </Form>*/}
+                            {/*                </Col>*/}
+                            {/*                <Col span={6} style={{display:'flex', justifyContent:'space-around',*/}
+                            {/*                    height:'100%', marginTop:10*screen_scale_width*/}
+                            {/*                }}>*/}
+                            {/*                    <Button style={{width:'50%', marginLeft:20*screen_scale_width}} type="primary"*/}
+                            {/*                            onClick={this._btnConfirm}*/}
+                            {/*                            disabled={this.state.selectBtn == -1 ? true : false}*/}
+                            {/*                    >确定</Button>*/}
+                            {/*                    <Button style={{width:'50%', marginLeft:20*screen_scale_width}} type="danger"*/}
+                            {/*                            onClick={this._btnCancel}*/}
+                            {/*                    >取消</Button>*/}
+                            {/*                </Col>*/}
+                            {/*            </Row>*/}
+                            {/*        </Row>*/}
+                            {/*    </Row>*/}
+                            {/*</TabPane>*/}
                         </Tabs>,
                     </Col>
                 </Row>
