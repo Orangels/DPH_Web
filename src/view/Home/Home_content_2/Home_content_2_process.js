@@ -68,7 +68,8 @@ class Home_content_2_process extends React.Component {
                      style={{position: "absolute", right: text_left_top-5 , top: (process_width-30*screen_scale_height)/(5-1)*index,
                          zIndex:100,
                      }}>
-                    {`${parseInt(heatMapDurationMaxValue * heatMapDurationEachValue*(1-0.2*index))} s`}
+                    {/*{`${parseInt(heatMapDurationMaxValue * heatMapDurationEachValue*(1-0.2*index))} s`}*/}
+                    {`${parseInt(20 *(1-0.2*index))} s`}
                 </Tag>
             )
         })

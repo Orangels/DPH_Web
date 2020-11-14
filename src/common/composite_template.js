@@ -252,6 +252,74 @@ class Template extends React.Component {
         let timestamp = parseInt(this.props.appStore.trackerTimestamp / 1000)
         //CAD heatMap
         for (let trackerPerson of trackerObjs) {
+        // for (let i = 0; i < trackerObjs.length; i++) {
+        //     let trackerPerson = trackerObjs[i]
+        //     let trackerFishPerson = fish_trackerObjs[i]
+        //
+        //     let {x, y, trackID} = trackerPerson
+        //
+        //     let x_fish = trackerFishPerson.x
+        //     let y_fish = trackerFishPerson.y
+        //     let trackID_fish = trackerFishPerson.trackID
+        //
+        //
+        //     let cad_point = {
+        //         x, y
+        //     }
+        //
+        //     let fish_point = {
+        //         x: x_fish,
+        //         y: y_fish
+        //     }
+        //
+        //     let pointInCadHeatMapCirle = false
+        //     let pointInFishHeatMapCirle = false
+        //
+        //     for (let j = 0; j < Object.keys(this.heatMapPoints).length; j++) {
+        //         let cad_key = Object.keys(this.heatMapPoints)[j]
+        //         let fish_key = Object.keys(this.fishHeatMapPoints)[j]
+        //
+        //         let cad_circle = {
+        //             x: parseInt(cad_key.split(',')[0]),
+        //             y: parseInt(cad_key.split(',')[1]),
+        //         }
+        //
+        //         let fish_circle = {
+        //             x: parseInt(fish_key.split(',')[0]),
+        //             y: parseInt(fish_key.split(',')[1]),
+        //         }
+        //
+        //         if (_pointInsideCircle(cad_point, cad_circle, 23) && trackID == parseInt(cad_key.split(',')[2])) {
+        //             pointInCadHeatMapCirle = true
+        //         }
+        //
+        //         if (_pointInsideCircle(fish_point, fish_circle, 7) && trackID_fish == parseInt(fish_key.split(',')[2])) {
+        //             pointInFishHeatMapCirle = true
+        //         }
+        //
+        //         if ( pointInCadHeatMapCirle && pointInFishHeatMapCirle){
+        //             break
+        //         }
+        //
+        //     }
+        //
+        //     if (!pointInCadHeatMapCirle){
+        //         this.heatMapPoints[[x, y, trackID]] = {
+        //             x: cad_point.x,
+        //             y: cad_point.y,
+        //             value: 1
+        //         }
+        //     }
+        //
+        //     if (!pointInFishHeatMapCirle){
+        //         this.fishHeatMapPoints[[x, y, trackID]] = {
+        //             x: fish_point.x,
+        //             y: fish_point.y,
+        //             value: 1
+        //         }
+        //     }
+
+
             let {x, y, trackID} = trackerPerson
             let point = {
                 x, y
@@ -281,46 +349,50 @@ class Template extends React.Component {
 
             let includeKyes = []
 
-            // let heatMapDurationPointsTmp = deepCopy(this.heatMapDurationPoints)
-            // // let heatMapDurationPointsTmp = this.heatMapDurationPoints
-            // for (let key in heatMapDurationPointsTmp) {
-            //     let circle = {
-            //         x: parseInt(key.split(',')[0]),
-            //         y: parseInt(key.split(',')[1]),
-            //     }
-            //
-            //     // console.log('!!!!!!!')
-            //     // console.log(`point - ${point.x} -- ${point.y} -- ${circle.x} -- ${circle.y}`)
-            //     // console.log(`trackID - ${trackID} -- ${parseInt(key.split(',')[2])}`)
-            //     // console.log(`timestamp - ${timestamp} -- ${parseInt(key.split(',')[3])}`)
-            //     // console.log('!!!!!!!')
-            //     if (_pointInsideCircle(point, circle, heatMapDuration_radius) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
-            //     // if (trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
-            //         this.heatMapDurationPoints[key] = Object.assign(this.heatMapDurationPoints[key], {value: this.heatMapDurationPoints[key].value + 1});
-            //         delete this.heatMapDurationPoints[key];
-            //         let value = heatMapDurationPointsTmp[key].value + 1;
-            //         console.log(`更新 驻留 value -- ${value}, ${trackID}`)
-            //         this.heatMapDurationPoints[[heatMapDurationPointsTmp[key].x,heatMapDurationPointsTmp[key].y,trackID,timestamp]] = {
-            //             x:heatMapDurationPointsTmp[key].x,
-            //             y:heatMapDurationPointsTmp[key].y,
-            //             value: value
-            //         };
-            //
-            //         includeKyes.push(circle);
-            //         break
-            //     }
-            // }
-            // if (includeKyes.length === 0){
-            //     console.log(includeKyes)
-            //     console.log(includeKyes.length)
-            //     console.log(includeKyes.length === 0)
-            //     console.log(`添加 驻留 value -- 1, ${trackID}`)
-            //     this.heatMapDurationPoints[[x,y,trackID,timestamp]] = {
-            //         x:x,
-            //         y:y,
-            //         value:1
-            //     }
-            // }
+            let heatMapDurationPointsTmp = deepCopy(this.heatMapDurationPoints)
+            // let heatMapDurationPointsTmp = this.heatMapDurationPoints
+            for (let key in heatMapDurationPointsTmp) {
+                let circle = {
+                    x: parseInt(key.split(',')[0]),
+                    y: parseInt(key.split(',')[1]),
+                }
+
+                // console.log('!!!!!!!')
+                // console.log(`point - ${point.x} -- ${point.y} -- ${circle.x} -- ${circle.y}`)
+                // console.log(`trackID - ${trackID} -- ${parseInt(key.split(',')[2])}`)
+                // console.log(`timestamp - ${timestamp} -- ${parseInt(key.split(',')[3])}`)
+                // console.log('!!!!!!!')
+                if (_pointInsideCircle(point, circle, 10) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
+
+                    delete this.heatMapDurationPoints[key];
+                    let value = heatMapDurationPointsTmp[key].value + 1;
+                    console.log(`更新 驻留 value -- ${value}, ${trackID}`)
+                    this.heatMapDurationPoints[[heatMapDurationPointsTmp[key].x,heatMapDurationPointsTmp[key].y,trackID,timestamp]] = {
+                        x:heatMapDurationPointsTmp[key].x,
+                        y:heatMapDurationPointsTmp[key].y,
+                        value: value
+                    };
+
+                    // if (key !== `${heatMapDurationPointsTmp[key].x},${heatMapDurationPointsTmp[key].y},${trackID},${timestamp}`){
+                    //     console.log('delete fishHeatMap key')
+                    //     delete this.heatMapDurationPoints[key];
+                    // }
+
+                    includeKyes.push(circle);
+                    break
+                }
+            }
+            if (includeKyes.length === 0){
+                console.log(includeKyes)
+                console.log(includeKyes.length)
+                console.log(includeKyes.length === 0)
+                console.log(`添加 驻留 value -- 1, ${trackID}`)
+                this.heatMapDurationPoints[[x,y,trackID,timestamp]] = {
+                    x:x,
+                    y:y,
+                    value:1
+                }
+            }
 
         }
 
@@ -340,14 +412,14 @@ class Template extends React.Component {
                     y: parseInt(key.split(',')[1]),
                 }
 
-                if (_pointInsideCircle(point, circle,  7) && trackID == parseInt(key.split(',')[2])) {
+                if (_pointInsideCircle(point, circle, 7) && trackID == parseInt(key.split(',')[2])) {
                     pointInFishHeatMapCirle = true
                     break
                 }
 
             }
 
-            if (!pointInFishHeatMapCirle){
+            if (!pointInFishHeatMapCirle) {
                 this.fishHeatMapPoints[[x, y, trackID]] = {
                     x: x,
                     y: y,
@@ -356,51 +428,55 @@ class Template extends React.Component {
             }
 
 
-
             let includeKyes = []
 
             let heatMapDurationPointsTmp = deepCopy(this.fishHeatMapDurationPoints)
             // // let heatMapDurationPointsTmp = this.fishHeatMapDurationPoints
-            // for (let key in heatMapDurationPointsTmp) {
-            //     let circle = {
-            //         x: parseInt(key.split(',')[0]),
-            //         y: parseInt(key.split(',')[1]),
-            //     }
-            //     let point = {
-            //         x,
-            //         y
-            //     }
+            for (let key in heatMapDurationPointsTmp) {
+                let circle = {
+                    x: parseInt(key.split(',')[0]),
+                    y: parseInt(key.split(',')[1]),
+                }
+                // let point = {
+                //     x,
+                //     y
+                // }
             // console.log('!!!!!!!')
             // console.log(`point - ${point.x} -- ${point.y} -- ${circle.x} -- ${circle.y}`)
             // console.log(`trackID - ${trackID} -- ${parseInt(key.split(',')[2])}`)
             // console.log(`timestamp - ${timestamp} -- ${parseInt(key.split(',')[3])}`)
             // console.log('!!!!!!!')
-            //     if (_pointInsideCircle(point, circle, heatMapDuration_radius) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
-            //     // if (trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
-            //         delete this.fishHeatMapDurationPoints[key];
-            //         let value = heatMapDurationPointsTmp[key].value + 1;
-            //         console.log(`更新 驻留 value -- ${value}, ${trackID}`)
-            //         this.fishHeatMapDurationPoints[[heatMapDurationPointsTmp[key].x,heatMapDurationPointsTmp[key].y,trackID,timestamp]] = {
-            //             x:heatMapDurationPointsTmp[key].x,
-            //             y:heatMapDurationPointsTmp[key].y,
-            //             value: value
-            //         };
-            //
-            //         includeKyes.push(circle);
-            //         break
-            //     }
-            // }
-            // if (includeKyes.length === 0){
-            //     console.log(includeKyes)
-            //     console.log(includeKyes.length)
-            //     console.log(includeKyes.length === 0)
-            //     console.log(`添加 驻留 value -- 1, ${trackID}`)
-            //     this.fishHeatMapDurationPoints[[x,y,trackID,timestamp]] = {
-            //         x:x,
-            //         y:y,
-            //         value:1
-            //     }
-            // }
+
+                if (_pointInsideCircle(point, circle, 10) && trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
+                // if (trackID==parseInt(key.split(',')[2]) && timestamp - parseInt(key.split(',')[3]) <= heatMapInterval) {
+                    delete this.fishHeatMapDurationPoints[key];
+                    let value = heatMapDurationPointsTmp[key].value + 1;
+                    console.log(`更新 驻留 value -- ${value}, ${trackID}`)
+                    this.fishHeatMapDurationPoints[[heatMapDurationPointsTmp[key].x,heatMapDurationPointsTmp[key].y,trackID,timestamp]] = {
+                        x:heatMapDurationPointsTmp[key].x,
+                        y:heatMapDurationPointsTmp[key].y,
+                        value: value
+                    };
+                    // if (key !== `${heatMapDurationPointsTmp[key].x},${heatMapDurationPointsTmp[key].y},${trackID},${timestamp}}`){
+                    //     console.log('delete fishHeatMap key')
+                    //     delete this.fishHeatMapDurationPoints[key];
+                    // }
+
+                    includeKyes.push(circle);
+                    break
+                }
+            }
+            if (includeKyes.length === 0){
+                console.log(includeKyes)
+                console.log(includeKyes.length)
+                console.log(includeKyes.length === 0)
+                console.log(`添加 驻留 value -- 1, ${trackID}`)
+                this.fishHeatMapDurationPoints[[x,y,trackID,timestamp]] = {
+                    x:x,
+                    y:y,
+                    value:1
+                }
+            }
 
         }
 

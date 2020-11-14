@@ -12,11 +12,11 @@ export let heatMapMaxValue = 10
 export let cadHeatmap_radius = 50
 export let fishHeatmap_radius = 20
 
-export let cadHeatmapJSDuration_radius = 70
+export let cadHeatmapJSDuration_radius = 30
 export let fishHeatmapJSDuration_radius = 20
 
 
-export let heatMapDurationMaxValue = 5  // heatMapDurationMaxValue * heatMapDurationEachValue = 60s
+export let heatMapDurationMaxValue = 15  // heatMapDurationMaxValue * heatMapDurationEachValue = 60s
 
 /**
  *
@@ -32,10 +32,12 @@ export let heatMapDurationMaxValue = 5  // heatMapDurationMaxValue * heatMapDura
  '1': '#ED6B44'
  */
 
+let uploadFps = 3
 export let heatMapDurationEachValue = 12
 let uploadCoorsInterval = 2
 //计数, 由客户端通信, 热图持续时长变换颜色, 间隔时间是 value * uploadCoorsInterval / heatMapDuration 单位 s , 间隔 value + 1
 export let heatMapDuration = heatMapDurationEachValue / uploadCoorsInterval
+// export let heatMapDuration = uploadFps
 
 
 //热图 丢失时间间隔 间隔内算同一个热图点 单位 s (由时间戳计算)
@@ -48,4 +50,4 @@ export let trackerMaxValue = 50
 
 // export let plainOptions = ['轨迹', '频次热图', '驻留热图' ,'图例'];
 export let plainOptions = ['无', '频次热图', '驻留热图' ,'图例'];
-export let heatMapLegend = ['轨迹热图图例', '驻留热图图例'];
+export let heatMapLegend = ['频次热图', '驻留热图'];
