@@ -1,7 +1,7 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react/index'
 import {toJS, autorun} from 'mobx'
-import {Checkbox} from 'antd';
+import {Checkbox, Radio} from 'antd';
 import Heatmap from 'heatmap.js';
 import {screen_scale_height, screen_scale_width, trackerColoreMap, personIDColreMap} from "../../parameter/parameters";
 
@@ -10,12 +10,14 @@ import {
     imgHeight,
     iconWidth,
     iconHeight,
-    heatMapMaxValue,
     heatMapDurationMaxValue,
     trackerMaxValue,
     heatMapDuration,
     plainOptions,
-    heatmapJSDuration_radius
+
+    cadHeatmap_radius,
+    heatMapMaxValue,
+    cadHeatmapJSDuration_radius
 } from "../../parameter/home_content_2_1_parametere_data"
 
 import Home_content_2_process from './Home_content_2_process'
@@ -47,9 +49,11 @@ class Home_content_2_1_canvas extends React.Component {
         // 初始状态
         this.state = {
             // img: 'http://192.168.88.221:5000/static/staticPic/back.jpg'
-            checkedList: []
+            // checkedList: []
+            checkedList:[plainOptions[0]]
         };
         this._checkBoxOnChange = this._checkBoxOnChange.bind(this)
+        this._checkRadioOnChange = this._checkRadioOnChange.bind(this)
 
         this._drawImage = this._drawImage.bind(this);
         this._update_data = this._update_data.bind(this)
@@ -62,13 +66,32 @@ class Home_content_2_1_canvas extends React.Component {
     }
 
     _checkBoxOnChange(checkedList) {
+
         let _sync_checkedList = this.props.sync_checkedList || function () {
 
         }
+
         this.setState({
-            checkedList,
+            checkedList:checkedList
         });
         _sync_checkedList(checkedList)
+    }
+
+    _checkRadioOnChange(e) {
+
+        let _sync_checkedList = this.props.sync_checkedList || function () {
+
+        }
+
+        let checkedList = [e.target.value]
+
+        console.log(checkedList)
+        this.setState({
+            checkedList
+        }, ()=>{
+            _sync_checkedList(checkedList)
+        });
+
     }
 
     /**
@@ -111,27 +134,39 @@ class Home_content_2_1_canvas extends React.Component {
         this._addToPoint(deepCopy(rect_center))
     }
 
-    _draw() {
+    _draw(ImageRect, trackerArr, heatMapPoints, heatMapDurationPoints) {
 
-        this.imgageIcomCoors = toJS(this.props.appStore.imgageIcomCoors || [])
+        // this.imgageIcomCoors = toJS(this.props.appStore.imgageIcomCoors || [])
+        // // //heatMap
+        // this.heatMapPoints = toJS(this.props.appStore.heatMapPoints || {});
+        // //durationheatMap
+        // this.heatMapDurationPoints = toJS(this.props.appStore.heatMapDurationPoints || {})
+        // console.log('CAD GET heatMapDurationPoints')
+        // console.log(this.heatMapDurationPoints)
+        // // //tracker
+        // this.trackIDsArr = toJS(this.props.appStore.trackIDsArr || {})
+        // //
+        // this.trackerArr = toJS(this.props.appStore.trackerArr || [])
+
+
+        this.imgageIcomCoors = ImageRect || [];
         // //heatMap
-        this.heatMapPoints = toJS(this.props.appStore.heatMapPoints || {});
+        this.heatMapPoints = heatMapPoints || {};
         //durationheatMap
-        this.heatMapDurationPoints = toJS(this.props.appStore.heatMapDurationPoints || {})
+        this.heatMapDurationPoints = heatMapDurationPoints || {}
         console.log('CAD GET heatMapDurationPoints')
         console.log(this.heatMapDurationPoints)
         // //tracker
-        this.trackIDsArr = toJS(this.props.appStore.trackIDsArr || {})
         //
-        this.trackerArr = toJS(this.props.appStore.trackerArr || [])
+        this.trackerArr = trackerArr || []
 
-        // this.trackerTimestamp = this.props.appStore.trackerTimestamp
+
 
         console.log(this.imgageIcomCoors)
         requestAnimationFrame(() => {
             this._drawImage(this.imgageIcomCoors, false)
             this._drawPoint(this.heatMapPoints, this.heatMapDurationPoints)
-            this._drawTracker(this.trackerArr)
+            // this._drawTracker(this.trackerArr)
         })
 
     }
@@ -181,7 +216,7 @@ class Home_content_2_1_canvas extends React.Component {
             container: document.getElementById('ls_heatmap_canvas'),
 
             // radius: 80,
-            radius: 0,
+            radius: cadHeatmap_radius,
 
             maxOpacity: .9,
 
@@ -213,7 +248,7 @@ class Home_content_2_1_canvas extends React.Component {
             container: document.getElementById('ls_heatmap_duration_canvas'),
 
             // radius: 80,
-            radius: heatmapJSDuration_radius,
+            radius: cadHeatmapJSDuration_radius,
 
             maxOpacity: .9,
 
@@ -322,23 +357,33 @@ class Home_content_2_1_canvas extends React.Component {
             })
         }
 
-        this.heatMap.setData({
+        if (this.state.checkedList.includes(plainOptions[1])){
+            this.heatMap.setData({
 
-            max: heatMapMaxValue,
+                max: heatMapMaxValue,
 
-            data
+                data
 
-        })
+            })
+        }
 
-        this.durantionHeatMap.setData({
+        if (this.state.checkedList.includes(plainOptions[2])){
+            this.durantionHeatMap.setData({
 
-            max: heatMapDurationMaxValue,
+                max: heatMapDurationMaxValue,
 
-            data: durationDateUnrepetitionArr
+                data: durationDateUnrepetitionArr
 
-        })
-        console.log(`CAD duration heatMap`)
-        console.log(durationDate)
+            })
+        }
+
+        // console.log(`CAD duration heatMap`)
+        // console.log(durationDate)
+
+        // console.log('&&&&&&&&&&')
+        // console.log(this.heatMap.getData())
+        // console.log('&&&&&&&&&&')
+
     }
 
     _addToPoint(trackerObjs) {
@@ -362,6 +407,7 @@ class Home_content_2_1_canvas extends React.Component {
     }
 
     _drawImage(rect, init) {
+
         let personImgs = []
         // this.rectCache.forEach((val, index)=>{
         //     // console.log(index)
@@ -488,11 +534,18 @@ class Home_content_2_1_canvas extends React.Component {
                     zIndex: 99,
                     color: '#FFFFFF',
                 }}>
-                    <CheckboxGroup
-                        options={plainOptions}
-                        value={this.state.checkedList}
-                        onChange={this._checkBoxOnChange}
-                    />
+                    {/*<CheckboxGroup*/}
+                    {/*    options={plainOptions}*/}
+                    {/*    value={this.state.checkedList}*/}
+                    {/*    onChange={this._checkBoxOnChange}*/}
+                    {/*/>*/}
+                    <Radio.Group onChange={this._checkRadioOnChange} value={this.state.checkedList[0]}>
+                        <Radio value={plainOptions[0]}>{plainOptions[0]}</Radio>
+                        <Radio value={plainOptions[1]}>{plainOptions[1]}</Radio>
+                        <Radio value={plainOptions[2]}>{plainOptions[2]}</Radio>
+                        <Radio value={plainOptions[3]}>{plainOptions[3]}</Radio>
+                    </Radio.Group>
+
                 </div>
                 <div style={{
                     position: 'absolute', top: 0, zIndex: 99, right: 0, backgroundColor: '#FFFFFF', padding: "0px 5px",
@@ -515,7 +568,8 @@ class Home_content_2_1_canvas extends React.Component {
                 <canvas id="ls_tracker_canvas" width={imgWidht} height={imgHeight}
                         style={{
                             border: '0px solid #FF1C1F', borderRadius: 5,
-                            zIndex: this.state.checkedList.includes(plainOptions[0]) ? 39 : -1,
+                            // zIndex: this.state.checkedList.includes(plainOptions[0]) ? 39 : -1,
+                            zIndex: -1,
                             position: "absolute", top: 0,
                         }}>
                 </canvas>

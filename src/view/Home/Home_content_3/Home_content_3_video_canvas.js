@@ -9,12 +9,15 @@ import videoSWF from 'videojs-swf/dist/video-js.swf';
 import {hostname} from "../../../common/urls";
 import {
     heatMapDuration,
-    heatMapMaxValue,
     heatMapDurationMaxValue,
     imgHeight,
     imgWidht,
     plainOptions,
-    heatmapJSDuration_radius
+
+    fishHeatmap_radius,
+    heatMapMaxValue,
+    fishHeatmapJSDuration_radius
+
 } from "../../parameter/home_content_2_1_parametere_data";
 import Heatmap from "heatmap.js";
 
@@ -34,11 +37,11 @@ class Home_content_3_video_canvas extends React.Component {
         this._drawPoint = this._drawPoint.bind(this)
     }
 
-    _draw(){
+    _draw(ImageRect, trackerArr, heatMapPoints, heatMapDurationPoints){
         //heatMap
-        this.heatMapPoints = this.props.appStore.fishHeatMapPoints || {}
+        this.heatMapPoints = heatMapPoints || {}
         //heatMapDuration
-        this.heatMapDurationPoints = this.props.appStore.fishHeatMapDurationPoints || {}
+        this.heatMapDurationPoints = heatMapDurationPoints || {}
 
         requestAnimationFrame(()=>{
             this._drawPoint(this.heatMapPoints, this.heatMapDurationPoints)
@@ -93,21 +96,25 @@ class Home_content_3_video_canvas extends React.Component {
         // console.log('去重 heatmap')
         // console.log(durationDateUnrepetitionArr)
 
-        this.heatMap.setData({
+        if (this.state.checkedList.includes(plainOptions[1])){
+            this.heatMap.setData({
 
-            max: heatMapMaxValue,
+                max: heatMapMaxValue,
 
-            data
+                data
 
-        })
+            })
+        }
 
-        this.durantionHeatMap.setData({
+        if (this.state.checkedList.includes(plainOptions[2])){
+            this.durantionHeatMap.setData({
 
-            max: heatMapDurationMaxValue,
+                max: heatMapDurationMaxValue,
 
-            data: durationDateUnrepetitionArr
+                data: durationDateUnrepetitionArr
 
-        })
+            })
+        }
     }
 
     componentDidMount() {
@@ -139,6 +146,7 @@ class Home_content_3_video_canvas extends React.Component {
 
         this.props.appStore.updateHomeFishVideoCanvasSize(canvas_width);
 
+
         this.setState({
             canvas_width,
             canvas_height
@@ -149,7 +157,7 @@ class Home_content_3_video_canvas extends React.Component {
                 container: document.getElementById('ls_fishVideo_heatmap_canvas'),
 
                 // radius: 80,
-                radius: 0,
+                radius: fishHeatmap_radius,
 
                 maxOpacity: .9,
 
@@ -181,7 +189,7 @@ class Home_content_3_video_canvas extends React.Component {
                 container: document.getElementById('ls_fishVideo_heatmap_duration_canvas'),
 
                 // radius: 80,
-                radius: heatmapJSDuration_radius,
+                radius: fishHeatmapJSDuration_radius,
 
                 maxOpacity: .9,
 

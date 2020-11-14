@@ -333,7 +333,8 @@ class Home extends React.Component {
     }
 
 
-    _ws_new_coor(data){
+    _ws_new_coor(ImageRect, trackerArr, heatMapPoints, heatMapDurationPoints,
+    fishHeatMapPoints, fishHeatMapDurationPoints){
         // let results = data.result
         // console.log('*******')
         // console.log(this.refs.canvasComponent)
@@ -344,8 +345,8 @@ class Home extends React.Component {
         // window.requestAnimationFrame(this.refs.canvasComponent.wrappedInstance._draw)
         // this.refs.canvasComponent.wrappedInstance._draw
 
-        this.refs.canvasComponent.wrappedInstance._draw();
-        this.refs.Home_content_3_video_canvas.wrappedInstance._draw();
+        this.refs.canvasComponent.wrappedInstance._draw(ImageRect, trackerArr, heatMapPoints, heatMapDurationPoints);
+        this.refs.Home_content_3_video_canvas.wrappedInstance._draw(ImageRect, trackerArr, fishHeatMapPoints, fishHeatMapDurationPoints);
     }
 
     sync_checkedList(checkedList){
