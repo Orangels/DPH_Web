@@ -1,7 +1,7 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react/index'
 import {toJS, autorun} from 'mobx'
-import {Checkbox, Radio} from 'antd';
+import {Checkbox, Radio, Select} from 'antd';
 import Heatmap from 'heatmap.js';
 import {screen_scale_height, screen_scale_width, trackerColoreMap, personIDColreMap} from "../../parameter/parameters";
 
@@ -32,13 +32,17 @@ import hb from "../../../asset/test/hb_icon.jpg";
 import None_person from "../../../asset/test/none_person.jpg";
 // import back from "../../../asset/test/world_clear.jpg";
 // import back_wiwide from "../../../asset/test/world_wiwide.jpg";
-import back from "../../../asset/test/ysld_1115.jpg";
+// import back from "../../../asset/test/ysld_1115.jpg";
+import back from "../../../asset/test/ysld_1115_clear.jpg";
 
-import './Home_content_2_1_canvas.css'
+import './Home_content_2_1_canvas.less'
 
 const CheckboxGroup = Checkbox.Group;
 
 const clearImgWidth = 30
+
+const { Option } = Select;
+
 
 @inject('appStore') @observer
 class Home_content_2_1_canvas extends React.Component {
@@ -54,6 +58,7 @@ class Home_content_2_1_canvas extends React.Component {
         };
         this._checkBoxOnChange = this._checkBoxOnChange.bind(this)
         this._checkRadioOnChange = this._checkRadioOnChange.bind(this)
+        this._checkSelectOnChange = this._checkSelectOnChange.bind(this)
 
         this._drawImage = this._drawImage.bind(this);
         this._update_data = this._update_data.bind(this)
@@ -81,7 +86,11 @@ class Home_content_2_1_canvas extends React.Component {
 
         let _sync_checkedList = this.props.sync_checkedList || function () {
 
-        }
+        };
+
+        let _sycn_draw = this.props.sync_draw || function () {
+
+        };
 
         let checkedList = [e.target.value]
 
@@ -90,6 +99,30 @@ class Home_content_2_1_canvas extends React.Component {
             checkedList
         }, ()=>{
             _sync_checkedList(checkedList)
+            _sycn_draw()
+        });
+
+    }
+
+
+    _checkSelectOnChange(value) {
+
+        let _sync_checkedList = this.props.sync_checkedList || function () {
+
+        };
+
+        let _sycn_draw = this.props.sync_draw || function () {
+
+        };
+
+        let checkedList = [value]
+
+        console.log(checkedList)
+        this.setState({
+            checkedList
+        }, ()=>{
+            _sync_checkedList(checkedList)
+            _sycn_draw()
         });
 
     }
@@ -530,21 +563,35 @@ class Home_content_2_1_canvas extends React.Component {
                 <div style={{
                     position: 'absolute',
                     top: 0,
-                    left: 180 * screen_scale_width,
+                    // left: 180 * screen_scale_width,
+                    left: 150 * screen_scale_width,
                     zIndex: 99,
                     color: '#FFFFFF',
-                }}>
+                }}
+                className={'Home_content_2_1_canvas_absolute'}>
                     {/*<CheckboxGroup*/}
                     {/*    options={plainOptions}*/}
                     {/*    value={this.state.checkedList}*/}
                     {/*    onChange={this._checkBoxOnChange}*/}
                     {/*/>*/}
-                    <Radio.Group onChange={this._checkRadioOnChange} value={this.state.checkedList[0]}>
+                    <Radio.Group
+                        className={"Radio_Group"}
+                        onChange={this._checkRadioOnChange} value={this.state.checkedList[0]}>
                         <Radio value={plainOptions[0]}>{plainOptions[0]}</Radio>
                         <Radio value={plainOptions[1]}>{plainOptions[1]}</Radio>
                         <Radio value={plainOptions[2]}>{plainOptions[2]}</Radio>
                         <Radio value={plainOptions[3]}>{plainOptions[3]}</Radio>
                     </Radio.Group>
+
+                    {/*<Select defaultValue={plainOptions[0]} style={{ width: 120}} onChange={this._checkSelectOnChange}*/}
+                    {/*        // dropdownStyle={{backgroundColor:'#292D58'}}*/}
+                    {/*        // dropdownMenuStyle={{backgroundColor:'#94E149'}}*/}
+                    {/*>*/}
+                    {/*    <Option value={plainOptions[0]}>{plainOptions[0]}</Option>*/}
+                    {/*    <Option value={plainOptions[1]}>{plainOptions[1]}</Option>*/}
+                    {/*    <Option value={plainOptions[2]}>{plainOptions[2]}</Option>*/}
+                    {/*    <Option value={plainOptions[3]} >{plainOptions[3]}</Option>*/}
+                    {/*</Select>*/}
 
                 </div>
                 <div style={{

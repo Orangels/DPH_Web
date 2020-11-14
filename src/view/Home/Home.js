@@ -229,6 +229,7 @@ class Home extends React.Component {
             home_content_2_2_update_index:0
         };
         // this._updata_data = this._updata_data.bind(this)
+        this.sync_draw = this.sync_draw.bind(this)
         this._ws_new_coor = this._ws_new_coor.bind(this)
         this._ws_new_state = this._ws_new_state.bind(this)
         this._update_home_content_2_data = this._update_home_content_2_data.bind(this)
@@ -345,8 +346,19 @@ class Home extends React.Component {
         // window.requestAnimationFrame(this.refs.canvasComponent.wrappedInstance._draw)
         // this.refs.canvasComponent.wrappedInstance._draw
 
-        this.refs.canvasComponent.wrappedInstance._draw(ImageRect, trackerArr, heatMapPoints, heatMapDurationPoints);
-        this.refs.Home_content_3_video_canvas.wrappedInstance._draw(ImageRect, trackerArr, fishHeatMapPoints, fishHeatMapDurationPoints);
+        this.ImageRect = ImageRect;
+        this.trackerArr = trackerArr;
+        this.heatMapPoints = heatMapPoints;
+        this.heatMapDurationPoints = heatMapDurationPoints;
+        this.fishHeatMapPoints = fishHeatMapPoints;
+        this.fishHeatMapDurationPoints = fishHeatMapDurationPoints;
+        this.sync_draw();
+
+    }
+
+    sync_draw(){
+        this.refs.canvasComponent.wrappedInstance._draw(this.ImageRect, this.trackerArr, this.heatMapPoints, this.heatMapDurationPoints);
+        this.refs.Home_content_3_video_canvas.wrappedInstance._draw(this.ImageRect, this.trackerArr, this.fishHeatMapPoints, this.fishHeatMapDurationPoints);
     }
 
     sync_checkedList(checkedList){
@@ -405,7 +417,7 @@ class Home extends React.Component {
 
                 <div style={{...style.content, overflow:"visible"}} className={'Home_content_2'}>
                     {/*<Home_content_2_1 click={this.mapClick} />*/}
-                    <Home_content_2_1_canvas ref="canvasComponent" sync_checkedList={this.sync_checkedList}/>
+                    <Home_content_2_1_canvas ref="canvasComponent" sync_checkedList={this.sync_checkedList} sync_draw={this.sync_draw}/>
                     <Home_content_2_2 data={this.state.home_content_2_2_data}/>
                 </div>
                 {/*<Home_content_2_process />*/}

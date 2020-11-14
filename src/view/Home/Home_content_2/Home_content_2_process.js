@@ -12,13 +12,15 @@ import './Home_content_2_process.less'
 let process_width = 200*screen_scale_height
 let legend_top_left = -30*screen_scale_height
 
-let legend_left_top = -30 * screen_scale_width
+let legend_left_top = -80 * screen_scale_width
 
 let text_top_left = -100*screen_scale_height
 let text_top_right = -(100-1)*screen_scale_height
 
 let text_left_top = -55*screen_scale_width
 let text_right_top = -(100+8)*screen_scale_width
+
+let legend_wrap_top = 55 * screen_scale_height
 
 class Home_content_2_process extends React.Component {
     // 构造
@@ -69,7 +71,7 @@ class Home_content_2_process extends React.Component {
                          zIndex:100,
                      }}>
                     {/*{`${parseInt(heatMapDurationMaxValue * heatMapDurationEachValue*(1-0.2*index))} s`}*/}
-                    {`${parseInt(20 *(1-0.2*index))} s`}
+                    {`${_pad(parseInt(20 *(1-0.2*index)), 2)} s`}
                 </Tag>
             )
         })
@@ -89,7 +91,7 @@ class Home_content_2_process extends React.Component {
                 zIndex: this.state.wrapZindex,
                 overflow:"visible"
             }} className={'Home_content_heatMap_progress'}>
-                <div style={{position: 'relative'}}>
+                <div style={{position: 'relative', marginTop:legend_wrap_top}}>
                     <div className={'legend_div'}
                         style={{
                         height: process_width,
@@ -98,13 +100,13 @@ class Home_content_2_process extends React.Component {
 
                     <Tag className={'heatMap_legend_0'}
                          color="magenta"
-                          style={{position: "absolute", right: legend_left_top, top: legend_top_left
+                          style={{position: "absolute", left: legend_left_top, top: legend_top_left
                           }}>
                             {heatMapLegend[0]}
                     </Tag>
                     <Tag className={'heatMap_legend_1'}
                          color="magenta"
-                         style={{position: "absolute", left: legend_left_top, bottom: legend_top_left,
+                         style={{position: "absolute", right: legend_left_top - 10, top: legend_top_left,
                          }}>
                         {heatMapLegend[1]}
                     </Tag>
