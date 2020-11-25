@@ -70,28 +70,28 @@ class Home_content_3_video_canvas extends React.Component {
         }
 
         //去重 相同 x,y 坐标的值, 取 value 最大值
-        let durationDateUnrepetitionObj = {}
-        let durationDateUnrepetitionArr = []
-        for (let i = 0; i < durationDate.length; i++){
-            if (durationDateUnrepetitionObj.hasOwnProperty(`${durationDate[i].x},${durationDate[i].y}`)){
-                if (durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] < durationDate[i].value){
-                    durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
-                }
-            }else {
-                // durationDateUnrepetitionObj[[durationDate[i].x,durationDate[i].y]]
-                durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
-            }
-        }
-
-        for (let key in durationDateUnrepetitionObj) {
-            // console.log('~~~~')
-            // console.log(durationDateUnrepetitionObj[key])
-            durationDateUnrepetitionArr.push({
-                x:parseInt(key.split(',')[0]),
-                y:parseInt(key.split(',')[1]),
-                value: durationDateUnrepetitionObj[key]
-            })
-        }
+        // let durationDateUnrepetitionObj = {}
+        // let durationDateUnrepetitionArr = []
+        // for (let i = 0; i < durationDate.length; i++){
+        //     if (durationDateUnrepetitionObj.hasOwnProperty(`${durationDate[i].x},${durationDate[i].y}`)){
+        //         if (durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] < durationDate[i].value){
+        //             durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
+        //         }
+        //     }else {
+        //         // durationDateUnrepetitionObj[[durationDate[i].x,durationDate[i].y]]
+        //         durationDateUnrepetitionObj[`${durationDate[i].x},${durationDate[i].y}`] = durationDate[i].value
+        //     }
+        // }
+        //
+        // for (let key in durationDateUnrepetitionObj) {
+        //     // console.log('~~~~')
+        //     // console.log(durationDateUnrepetitionObj[key])
+        //     durationDateUnrepetitionArr.push({
+        //         x:parseInt(key.split(',')[0]),
+        //         y:parseInt(key.split(',')[1]),
+        //         value: durationDateUnrepetitionObj[key]
+        //     })
+        // }
 
         // console.log('去重 heatmap')
         // console.log(durationDateUnrepetitionArr)
@@ -111,8 +111,8 @@ class Home_content_3_video_canvas extends React.Component {
 
                 max: heatMapDurationMaxValue,
 
-                data: durationDateUnrepetitionArr
-
+                // data: durationDateUnrepetitionArr
+                data:durationDate
             })
         }
     }
