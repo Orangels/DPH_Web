@@ -1,0 +1,7 @@
+.event_board {
+  background: linear-gradient(#5580C8, #3161B3);
+}
+.mirror_img {
+  -webkit-box-reflect: below 10px -webkit-linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.8));
+}
+/*# sourceMappingURL=event_board.css.map */

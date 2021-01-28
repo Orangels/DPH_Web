@@ -905,7 +905,7 @@ class Template extends React.Component {
                 >
                     <div style={style.navigation_banner}>
                         <span style={{marginLeft: (900 - 31) * screen_scale_width}}>
-                            鱼眼跟踪
+                            全场感知
                         </span>
                     </div>
                     {navition_btn_component}

@@ -1,4 +1,5 @@
 import React from 'react'
+import {Row, Col} from 'antd'
 import Chart_area from "../../Chart/Chart_area"
 import {screen_scale_height, screen_scale_width} from "../../parameter/parameters";
 import Home_content_template from "../../../common/Home_content_template";
@@ -9,7 +10,12 @@ import Chart_custom from "../../Chart/Chart_custom";
 import Single_Histogram from '../../Chart/Chart_singleHistogram'
 import Histogram from "../../Chart/Histogram";
 import {inject, observer} from "mobx-react";
+// import xxs from "../../../asset/test/xxs_icon.jpg";
+import test_gif from "../../../asset/test/test.gif";
+
 // import backgroundBanner from "../../../asset/stu_back/4_学科分布.png";
+import Event_board from './event_board'
+import {url} from "../../../common/urls";
 
 let WaterWave_radius = 240 * screen_scale_width
 
@@ -201,6 +207,80 @@ let home_content_2_2_data = [
     },
 ]
 
+let event_content = [
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+    {
+        timestamp:"09:20:30",
+        content: "顾客试装"
+    },
+
+]
+
+let event_img = [test_gif, test_gif, test_gif, test_gif, test_gif, test_gif, test_gif]
+
 @inject('appStore') @observer
 class Home_content_2_2 extends React.Component {
     constructor(props) {
@@ -232,57 +312,39 @@ class Home_content_2_2 extends React.Component {
     render() {
         // let {component_text} = this.state.state_props
         // let persons_conversion = (this.state.pass_persons + this.state.entry_persons) == 0 ? 0 : parseInt(this.state.entry_persons / (this.state.pass_persons + this.state.entry_persons) * 100)
+
+
+        let pic_wall = event_img.map((val, index)=>{
+            return (
+                <img width={"33%"} height={250 * screen_scale_height} src={val} style={{marginLeft:5}}/>
+            )
+        })
+
+
         return (
-            <Home_content_template style={{
+            <Row style={{
                 width:810*screen_scale_width,
                 height:358 * screen_scale_height,
                 marginTop: 10*screen_scale_width,
-                background: `url(${backgroundBanner}) no-repeat `,
+                // background: `url(${backgroundBanner}) no-repeat `,
                 backgroundSize:'100% 100%',
-            }} title={this.props.data['title'] || "人员统计"}>
-                <div style={{
-                    // background:`url(${backgroundBanner}) no-repeat `,
-                    // backgroundSize: '100% 100%',
-                    width:'100%',
-                    height:'100%',
-                    display:"flex",
-                    // flexWrap:'wrap',
-                    flexDirection: 'row',
-                    marginTop:10*screen_scale_height,
-                    justifyContent:'space-around',
-                    alignItems:'flex-end'
-                }}
-                     className={'home_content_2_2_wrap_div'}
-                >
-                    {/*<Ul_component data={component_text}/>*/}
-                    {/*<Chart_area  height={330*screen_scale_height}*/}
-                    {/*             width={800*screen_scale_width}/>*/}
-                    {/*<Histogram  title={'进出人员统计'}*/}
-                    {/*            height={330*screen_scale_height}*/}
-                    {/*            width={800*screen_scale_width}/>*/}
-                    {/*<Single_Histogram  title={'进出人员统计'}*/}
-                    {/*            height={330*screen_scale_height}*/}
-                    {/*            width={800*screen_scale_width}/>*/}
-                    {/*<Chart_custom  title={''}*/}
-                    {/*    // height={276*screen_scale_width}*/}
-                    {/*               dataSource={this.state.data}*/}
-                    {/*               height={330*screen_scale_height}*/}
-                    {/*               width={800*screen_scale_width}/>*/}
-                    <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
-                               showText={`${this.props.appStore.entry_count}`}
-                               showText_1={`进店人数`}
-                               rangeValue={80} />
-                    <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
-                               showText={`${this.props.appStore.leave_count}`}
-                               showText_1={`离店人数`}
-                               rangeValue={80} />
-                    <WaterWave type="circle" width={WaterWave_radius} height={WaterWave_radius}
-                               showText={`${this.props.appStore.pass_count}`}
-                               showText_1={`过店人数`}
-                               rangeValue={80} />
+                // padding: '0 10px'
 
-                </div>
-            </Home_content_template>
+            }}
+                 gutter={16}
+                 title={this.props.data['title'] || "人员统计"}>
+                <Col span={7}>
+                    <Event_board title={"事件感知:"} litTitle={'当天记录:'} content={event_content} style={{height:358 * screen_scale_height,}}/>
+                </Col>
+                <Col span={17} style={{display:'flex',
+                    overflowX:'scroll'
+                }}
+                     className={'mirror_img'}
+                >
+                    {pic_wall}
+                </Col>
+
+            </Row>
         )
 
     }
