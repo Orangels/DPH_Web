@@ -29,11 +29,13 @@ import ls from "../../../asset/test/ls_icon.jpg";
 import gy from "../../../asset/test/gy_icon.jpg";
 import ydh from "../../../asset/test/ydh_icon.jpg";
 import hb from "../../../asset/test/hb_icon.jpg";
-import None_person from "../../../asset/test/none_person.jpg";
+// import None_person from "../../../asset/test/none_person.jpg";
+import None_person from "../../../asset/test/none_person_3d.jpg";
 // import back from "../../../asset/test/world_clear.jpg";
 // import back_wiwide from "../../../asset/test/world_wiwide.jpg";
 // import back from "../../../asset/test/ysld_1115.jpg";
-import back from "../../../asset/test/ysld_1115_clear.jpg";
+// import back from "../../../asset/test/ysld_1115_clear.jpg";
+import back from "../../../asset/test/ysld_3d.jpg";
 
 import './Home_content_2_1_canvas.less'
 

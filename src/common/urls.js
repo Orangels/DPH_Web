@@ -1,6 +1,6 @@
-export let url = window.location.origin
+// export let url = window.location.origin
 
-// export let url = 'http://192.168.88.84:5000'
+export let url = 'http://192.168.88.185:5000'
 
 // export let url = 'http://127.0.0.1:5000'
 // export let url = 'http://172.16.104.249:5000'

@@ -286,7 +286,8 @@ class Home_content_2_2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: home_content_2_2_data,
+            // data: home_content_2_2_data,
+            data:[],
             entry_persons: 0,
             pass_persons: 0,
         }
@@ -303,7 +304,10 @@ class Home_content_2_2 extends React.Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
         let {data} = nextProps || home_content_2_2_data
-
+        // console.log('state data')
+        // console.log(this.state.data)
+        // console.log('*************')
+        // console.log(data)
         this.setState({
             data:data
         })
@@ -314,9 +318,9 @@ class Home_content_2_2 extends React.Component {
         // let persons_conversion = (this.state.pass_persons + this.state.entry_persons) == 0 ? 0 : parseInt(this.state.entry_persons / (this.state.pass_persons + this.state.entry_persons) * 100)
 
 
-        let pic_wall = event_img.map((val, index)=>{
+        let pic_wall = this.state.data.map((val, index)=>{
             return (
-                <img width={"33%"} height={250 * screen_scale_height} src={val} style={{marginLeft:5}}/>
+                <img width={"33%"} height={250 * screen_scale_height} src={`${url}${val.pic}`} style={{marginLeft:5}}/>
             )
         })
 
@@ -332,9 +336,14 @@ class Home_content_2_2 extends React.Component {
 
             }}
                  gutter={16}
-                 title={this.props.data['title'] || "人员统计"}>
+                 // title={this.props.data['title'] || "人员统计"}
+            >
                 <Col span={7}>
-                    <Event_board title={"事件感知:"} litTitle={'当天记录:'} content={event_content} style={{height:358 * screen_scale_height,}}/>
+                    <Event_board title={"事件感知:"} litTitle={'当天记录:'}
+                                 // content={event_content}
+                                 content={this.state.data}
+                                 style={{
+                        height:258 * screen_scale_height,}}/>
                 </Col>
                 <Col span={17} style={{display:'flex',
                     overflowX:'scroll'

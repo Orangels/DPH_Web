@@ -124,19 +124,42 @@ class Home_content_3_video_canvas extends React.Component {
         //heatMapDuration
         this.heatMapDurationPoints = this.props.appStore.fishHeatMapDurationPoints || {}
 
+        // let options = {
+        //     autoplay: true,
+        //     controls: true,
+        //     preload: true, //预加载
+        //     fluid: true, //播放器将具有流畅的大小。换句话说，它将扩展以适应其容器
+        //     techOrder: ['flash'],//Video.js技术首选的顺序
+        //     aspectRatio: '1:1',//将播放器置于流体模式，在计算播放器的动态大小时使用。由冒号（"16:9"或"4:3"）分隔的两个数字
+        //     flash: {swf: videoSWF},
+        //     live: true,
+        //     sources: [{
+        //         type: "rtmp/flv",
+        //         src: `rtmp://${hostname}:1935/hls/000`,
+        //     }],
+        // }
+
+
         let options = {
-            autoplay: true,
-            controls: true,
-            preload: true, //预加载
-            fluid: true, //播放器将具有流畅的大小。换句话说，它将扩展以适应其容器
-            techOrder: ['flash'],//Video.js技术首选的顺序
+            // autoplay:    true,
+            controls:    true,
+            preload:     true, //预加载
+            fluid:       true, //播放器将具有流畅的大小。换句话说，它将扩展以适应其容器
             aspectRatio: '1:1',//将播放器置于流体模式，在计算播放器的动态大小时使用。由冒号（"16:9"或"4:3"）分隔的两个数字
-            flash: {swf: videoSWF},
+            techOrder:   ['html5'],//Video.js技术首选的顺序
             live: true,
             sources: [{
-                type: "rtmp/flv",
-                src: `rtmp://${hostname}:1935/hls/000`,
+                type: "application/x-mpegURL",
+                // src: "http://192.168.88.27/hls/room_1.m3u8",
+                // src: "http://192.168.88.92:8080/hls/test.m3u8",
+                // src: "http://192.168.88.25/hls/room.m3u8",
+                // src: `http://${window.location.hostname}/hls/000.m3u8`,
+                // src: `http://172.16.104.252/hls/000.m3u8`,
+                src: `http://192.168.88.185/hls/000.m3u8`,
+                withCredentials: false
             }],
+            // html5: { hls: { withCredentials: true } },
+            html5: { hls: { withCredentials: false } },
         }
 
         this.player = video(`home_example_video_0`, options);
@@ -230,7 +253,7 @@ class Home_content_3_video_canvas extends React.Component {
 
     render() {
         return (
-            <div style={{width: `100%`, position: "relative", marginRight: "2%",}}>
+            <div style={{width: `85%`, position: "relative", marginRight: "2%",}}>
                 <Tag color={'#FA0F21'} style={{position: 'absolute', top: 10, right: 10, zIndex: 99}}
                      closable>
                     {`鱼眼 0`}

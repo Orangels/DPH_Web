@@ -1,47 +1,51 @@
 import React from 'react'
 import {Row, Col} from 'antd'
-import Home_content_2_2 from "./Home_content_2_2";
 import {inject, observer} from "mobx-react";
-
-import './event_board.less'
+import {screen_scale_height, screen_scale_width} from "../../parameter/parameters";
+import './event_board_home_1.less'
 
 @inject('appStore') @observer
 class Event_board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            title:"事件感知:",
-            litTitle:"当天记录:",
-            content:[]
+            title:"进店人数:",
+            text:"0 人次",
+            content:[],
+            span:24,
         }
     }
 
     componentDidMount() {
-        let {title, litTitle, content} = this.props || {
-            title:"事件感知:",
-            litTitle:"当天记录:",
-            content:[]
+        let {title, text, content, span} = this.props || {
+            title:"进店人数:",
+            text:"0 人次",
+            content:[],
+            span:24
         }
 
         this.setState({
             title,
-            litTitle,
-            content
+            text,
+            content,
+            span
         })
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
 
-        let {title, litTitle, content} = nextProps || {
-            title:"事件感知:",
-            litTitle:"当天记录:",
-            content:[]
+        let {title, text, content, span} = nextProps || {
+            title:"进店人数:",
+            text:"0 人次",
+            content:[],
+            span:24
         }
 
         this.setState({
             title,
-            litTitle,
-            content
+            text,
+            content,
+            span
         })
 
     }
@@ -56,33 +60,34 @@ class Event_board extends React.Component {
             return (
                 <Row gutter={16} >
                     <Col span={12} style={{color:"white", fontSize:10}}>
-                        {val.start_time}
+                        {val.title}
                     </Col>
                     <Col span={12} style={{color:"white", fontSize:10}}>
-                        {val.act_type == 1 ? "商品触摸" : '辅助试装'}
+                        {val.content}
                     </Col>
                 </Row>
             )
         })
 
+        let span = this.props.span
+
         return (
-            <div
-                className={'event_board'}
-                style={{...{display:'flex', width:'100%', height: '100%', flexDirection:'column', padding:'10px 10px'},
-                ...this.props.style}}>
+            <Col span={span}
+                className={'event_board_home_1'}
+                style={{...{display:'flex',height: 100*screen_scale_height, flexDirection:'column', padding:'10px 10px'},
+                    ...this.props.style}}>
                 <span style={{color:"white", fontSize:18}}>
                     {this.state.title}
                 </span>
                 <span style={{color:"white", fontSize:14}}>
-                    {this.state.litTitle}
+                    {this.state.text}
                 </span>
                 <div style={{display:'flex', width:'100%', height: '80%', flexDirection:'column',
-                    overflowY:'scroll',
                     marginTop:20
                 }}>
                     {content_component}
                 </div>
-            </div>
+            </Col>
         )
     }
 }

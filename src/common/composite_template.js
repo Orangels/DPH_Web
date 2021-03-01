@@ -129,16 +129,19 @@ class Template extends React.Component {
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {};
+        this.state = {
+        };
 
         this._quitLogin = this._quitLogin.bind(this)
         this._ws_new_coor = this._ws_new_coor.bind(this)
         this._ws_new_state = this._ws_new_state.bind(this)
+        this._ws_new_sop = this._ws_new_sop.bind(this)
 
         this._update_homte_content_2_1_data = this._update_homte_content_2_1_data.bind(this)
         this._addToPoint = this._addToPoint.bind(this)
         this._addToTracker = this._addToTracker.bind(this)
 
+        this.sop_data = []
     }
 
     _quitLogin(current) {
@@ -521,6 +524,29 @@ class Template extends React.Component {
         this.trackerArr = trackerArr
     }
 
+    _ws_new_sop(data){
+        let results = data.result
+        let _new_sop_func = this.props.new_sop || function () {
+            results = data.result
+        }
+        console.log(results)
+        console.log("update sop")
+        this.sop_data = results.concat(this.sop_data)
+        let act_1 = 0
+        let act_2 = 0
+
+        this.sop_data.forEach((val, index)=>{
+            if (val.act_type == 1){
+                act_1 += 1
+            }
+            if (val.act_type == 2){
+                act_2 += 1
+            }
+        })
+        this.props.appStore.updateActionNums(act_1, act_2)
+        _new_sop_func(this.sop_data)
+    }
+
     _ws_new_coor(data) {
         let results = data.result
         let _new_coor_func = this.props.new_coor || function () {
@@ -788,6 +814,7 @@ class Template extends React.Component {
         // 测试 先关闭 socket
         this.socket = io(url_socket)
         this.socket.on('new_coor', this._ws_new_coor)
+        this.socket.on('new_sop', this._ws_new_sop)
         // this.socket.on('new_state',this._ws_new_state)
 
     }

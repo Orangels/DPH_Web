@@ -29,6 +29,9 @@ class AppStore {
     @observable entry_count = 0;    //进店人数
     @observable leave_count = 0;    //离店人数
     @observable pass_count = 0;     //过店人数
+    @observable act_1 = 0;          //act_type 1 触摸商品
+    @observable act_2 = 0;          //act_type 2 辅助试装
+    @observable act_total = 0;      //action 总人数
 
     @action updateEntryPersons(vPersons) {
         // this.entryPersons = deepCopy(vPersons)
@@ -82,6 +85,13 @@ class AppStore {
         this.leave_count = vLeaveCount;
         this.pass_count = vPassCount;
     }
+
+    @action updateActionNums(act_1, act_2) {
+        this.act_1 = act_1
+        this.act_2 = act_2
+        this.act_total = this.act_1 + this.act_2
+    }
+
 
     @action initUsers() {
         const localUsers = localStorage['users'] ? JSON.parse(localStorage['users']) : []
